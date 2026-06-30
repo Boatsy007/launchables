@@ -1,243 +1,186 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
 
-interface Testimonial {
-  quote: string;
-  name: string;
-  role: string;
-  company: string;
-  category: string;
-  initials: string;
-  avatarColor: string;
-}
-
-const testimonials: Testimonial[] = [
+const testimonials = [
   {
-    quote:
-      "Launchables built our website in 2 weeks and it immediately ranked on page one. We've seen a 340% increase in organic traffic.",
+    quote: "Launchables built our website in 2 weeks and it immediately ranked on page one. We've seen a 340% increase in organic traffic.",
     name: 'Sarah K.',
     role: 'Director',
     company: 'Apex Plumbing',
-    category: 'Trades',
     initials: 'SK',
-    avatarColor: '#FF5C00',
+    color: '#FF5C00',
   },
   {
-    quote:
-      "The best investment we've made. Our social media went from 200 to 15,000 followers in 90 days.",
+    quote: "The best investment we've made. Our social media went from 200 to 15,000 followers in 90 days. Incredible results.",
     name: 'Marcus T.',
     role: 'Owner',
     company: 'Nova Coffee',
-    category: 'Hospitality',
     initials: 'MT',
-    avatarColor: '#7C3AED',
+    color: '#7C3AED',
   },
   {
-    quote:
-      'We bought a ready-to-launch business from their marketplace and were trading within a month. Incredible.',
-    name: 'Priya M.',
-    role: 'Founder',
-    company: 'CleanPro',
-    category: 'Services',
-    initials: 'PM',
-    avatarColor: '#059669',
-  },
-  {
-    quote:
-      'The AI automation they set up saves us 20 hours a week. It paid for itself in the first month.',
-    name: 'James W.',
-    role: 'CEO',
-    company: 'Summit Events',
-    category: 'Events',
-    initials: 'JW',
-    avatarColor: '#0284C7',
-  },
-  {
-    quote:
-      'Honest, fast, and genuinely talented. Our rebrand drove a 3x increase in enquiries.',
+    quote: "Honest, fast, and genuinely talented. Our rebrand and new website drove a 3× increase in enquiries within the first month.",
     name: 'Emily R.',
     role: 'Owner',
     company: 'The Styling Room',
-    category: 'Beauty',
     initials: 'ER',
-    avatarColor: '#DB2777',
+    color: '#DB2777',
   },
   {
-    quote:
-      "Their SEO work put us at #1 for our main keyword in 8 weeks. We've never had so many leads.",
+    quote: "Their SEO work put us at #1 for our main keyword in 8 weeks. We've never had so many leads. Highly recommend.",
     name: 'Tom B.',
     role: 'Director',
-    company: 'Greenpath',
-    category: 'Landscaping',
+    company: 'Greenpath Landscaping',
     initials: 'TB',
-    avatarColor: '#16A34A',
+    color: '#16A34A',
   },
   {
-    quote:
-      'We launched our SaaS product through their marketplace and got 200 signups before we even had a full product.',
-    name: 'Alex C.',
+    quote: "From first call to live website in 3 weeks. The design blew me away. Our customers constantly compliment how professional we look.",
+    name: 'Priya M.',
     role: 'Founder',
-    company: 'Clearform AI',
-    category: 'Tech / SaaS',
-    initials: 'AC',
-    avatarColor: '#EA580C',
+    company: 'CleanPro Services',
+    initials: 'PM',
+    color: '#059669',
   },
   {
-    quote:
-      'The team feels like an extension of our business. Professional, responsive, and obsessed with results.',
-    name: 'Natasha V.',
-    role: 'CMO',
-    company: 'Velocity Gym',
-    category: 'Fitness',
-    initials: 'NV',
-    avatarColor: '#9333EA',
+    quote: "We've worked with agencies that charge double and deliver a fraction of the quality. Launchables are genuinely world class.",
+    name: 'James W.',
+    role: 'CEO',
+    company: 'Summit Events',
+    initials: 'JW',
+    color: '#0284C7',
   },
-];
+]
 
-function StarRating() {
+function Stars() {
   return (
-    <div className="flex gap-0.5 mb-4">
+    <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}>
       {[...Array(5)].map((_, i) => (
-        <svg key={i} width="16" height="16" viewBox="0 0 16 16" fill="#FF5C00">
-          <path d="M8 1l1.854 4.326L14.5 5.9l-3.25 3.167.767 4.433L8 11.25l-4.017 2.25.767-4.433L1.5 5.9l4.646-.574L8 1z" />
+        <svg key={i} width="14" height="14" viewBox="0 0 14 14" fill="#FF5C00">
+          <path d="M7 1l1.5 3 3.3.5-2.4 2.3.6 3.2L7 8.5l-3 1.5.6-3.2L2.2 4.5 5.5 4z" />
         </svg>
       ))}
     </div>
-  );
-}
-
-function TestimonialCard({ t, index }: { t: Testimonial; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, delay: index * 0.08 }}
-      className="break-inside-avoid mb-6"
-    >
-      <div
-        className="bg-white rounded-2xl p-7"
-        style={{
-          borderLeft: '4px solid #FF5C00',
-          boxShadow: '0 2px 20px rgba(0,0,0,0.06)',
-        }}
-      >
-        <StarRating />
-        <blockquote
-          className="text-base italic leading-relaxed mb-6"
-          style={{ color: '#222', fontFamily: 'Inter, sans-serif' }}
-        >
-          &ldquo;{t.quote}&rdquo;
-        </blockquote>
-        <div className="flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-            style={{ backgroundColor: t.avatarColor, fontFamily: 'Space Grotesk, sans-serif' }}
-          >
-            {t.initials}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p
-              className="font-semibold text-sm leading-tight"
-              style={{ color: '#111', fontFamily: 'Inter, sans-serif' }}
-            >
-              {t.name}
-            </p>
-            <p
-              className="text-xs leading-tight"
-              style={{ color: 'rgba(17,17,17,0.45)', fontFamily: 'Inter, sans-serif' }}
-            >
-              {t.role}, {t.company}
-            </p>
-          </div>
-          <span
-            className="text-xs px-2.5 py-1 rounded-full flex-shrink-0"
-            style={{
-              backgroundColor: 'rgba(255,92,0,0.08)',
-              color: '#FF5C00',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 500,
-            }}
-          >
-            {t.category}
-          </span>
-        </div>
-      </div>
-    </motion.div>
-  );
+  )
 }
 
 export default function Testimonials() {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
   return (
     <section
       id="testimonials"
-      style={{ backgroundColor: '#F8F7F4' }}
-      className="py-32 px-6 overflow-hidden"
+      style={{ backgroundColor: '#F8F7F4', padding: '120px 24px' }}
     >
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <p
-            className="text-xs uppercase tracking-[0.3em] mb-4 font-semibold"
-            style={{ color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div ref={ref} style={{ marginBottom: 64 }}>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            style={{
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.2em',
+              color: '#FF5C00',
+              fontFamily: 'Inter, sans-serif',
+              marginBottom: 16,
+            }}
           >
             Client Stories
-          </p>
-          <h2
-            className="text-5xl md:text-6xl font-bold"
-            style={{ fontFamily: 'Space Grotesk, sans-serif', color: '#111111' }}
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              lineHeight: 1.1,
+              letterSpacing: '-0.03em',
+              color: '#111111',
+              margin: 0,
+              maxWidth: 480,
+            }}
           >
-            What Our Clients Say.
-          </h2>
-        </motion.div>
-
-        <style>{`
-          .masonry-testimonials { column-count: 1; column-gap: 1.5rem; }
-          @media (min-width: 640px) { .masonry-testimonials { column-count: 2; } }
-          @media (min-width: 1024px) { .masonry-testimonials { column-count: 3; } }
-        `}</style>
-        <div className="masonry-testimonials">
-          {testimonials.map((t, i) => (
-            <TestimonialCard key={t.name} t={t} index={i} />
-          ))}
+            Results our clients love.
+          </motion.h2>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-16"
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gap: 20,
+          }}
         >
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <svg key={i} width="20" height="20" viewBox="0 0 16 16" fill="#FF5C00">
-                  <path d="M8 1l1.854 4.326L14.5 5.9l-3.25 3.167.767 4.433L8 11.25l-4.017 2.25.767-4.433L1.5 5.9l4.646-.574L8 1z" />
-                </svg>
-              ))}
-            </div>
-            <span
-              className="font-bold text-lg"
-              style={{ fontFamily: 'Space Grotesk, sans-serif', color: '#111' }}
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={t.name}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0,0,0,0.1)' }}
+              style={{
+                background: '#ffffff',
+                borderRadius: 20,
+                padding: '32px',
+                border: '1px solid rgba(17,17,17,0.06)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.05)',
+                transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+              }}
             >
-              4.9/5
-            </span>
-          </div>
-          <p
-            className="text-sm"
-            style={{ color: 'rgba(17,17,17,0.5)', fontFamily: 'Inter, sans-serif' }}
-          >
-            Based on 340+ client reviews across Australia
-          </p>
-        </motion.div>
+              <Stars />
+
+              <p
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.95rem',
+                  lineHeight: 1.7,
+                  color: 'rgba(17,17,17,0.75)',
+                  margin: '0 0 24px',
+                  fontStyle: 'italic',
+                }}
+              >
+                "{t.quote}"
+              </p>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div
+                  style={{
+                    width: 42,
+                    height: 42,
+                    borderRadius: '50%',
+                    background: t.color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fff', fontFamily: 'Space Grotesk, sans-serif' }}>
+                    {t.initials}
+                  </span>
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: '#111' }}>
+                    {t.name}
+                  </div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'rgba(17,17,17,0.45)' }}>
+                    {t.role}, {t.company}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,199 +1,184 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 
-const services = [
-  'Web Design', 'Development', 'SEO', 'Social Media',
-  'Branding', 'Photography', 'Video', 'AI Automation',
-];
-const marketplace = [
-  'Ready-to-Launch', 'Business Ideas', 'Website Templates',
-  'AI Businesses', 'Digital Products',
-];
-const company = ['About', 'Portfolio', 'Blog', 'Contact', 'Careers'];
+const quickLinks = [
+  { label: 'Websites', href: '#services' },
+  { label: 'Social Media', href: '#services' },
+  { label: 'Portfolio', href: '#portfolio' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'About', href: '#about' },
+  { label: 'Contact', href: '#contact' },
+]
 
 function InstagramIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" />
       <circle cx="12" cy="12" r="4" />
       <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
     </svg>
-  );
-}
-
-function TikTokIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.73a8.28 8.28 0 0 0 4.84 1.55V6.84a4.85 4.85 0 0 1-1.07-.15z" />
-    </svg>
-  );
-}
-
-function LinkedInIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
+  )
 }
 
 function FacebookIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
       <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
     </svg>
-  );
+  )
+}
+
+function LinkedInIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
 }
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubscribed(true);
-      setEmail('');
-    }
-  };
-
   return (
     <footer
-      style={{ backgroundColor: '#111111', borderTop: '1px solid rgba(255,255,255,0.08)' }}
-      className="pt-20 pb-10 px-6"
+      style={{
+        backgroundColor: '#0A0A0A',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+        padding: '64px 24px 32px',
+      }}
     >
-      <div className="max-w-7xl mx-auto">
-        {/* Big animated brand name */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-4 overflow-hidden"
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 48,
+            marginBottom: 56,
+          }}
         >
-          <span
-            className="font-bold tracking-[0.15em] leading-none select-none"
-            style={{
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontSize: 'clamp(3rem, 10vw, 9rem)',
-              color: 'rgba(255,255,255,0.06)',
-              display: 'block',
-            }}
-          >
-            LAUNCHABLES
-          </span>
-        </motion.div>
-
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-center mb-16"
-          style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'Inter, sans-serif' }}
-        >
-          The premium place to launch your next business.
-        </motion.p>
-
-        {/* Divider */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }} className="mb-16" />
-
-        {/* 4-column grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Col 1: Logo + description + newsletter + social */}
+          {/* Brand */}
           <div>
-            <div className="mb-4">
-              <span
-                className="text-xl font-bold text-white tracking-tight"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
-                Launchables
-              </span>
-            </div>
-            <p
-              className="text-sm leading-relaxed mb-6"
-              style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'Inter, sans-serif' }}
+            <a
+              href="/"
+              style={{
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontWeight: 700,
+                fontSize: '1.1rem',
+                color: '#ffffff',
+                textDecoration: 'none',
+                letterSpacing: '-0.01em',
+                display: 'block',
+                marginBottom: 14,
+              }}
             >
-              We build, launch, and grow digital businesses for ambitious founders across Australia.
+              LAUNCHABLES
+            </a>
+            <p
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.85rem',
+                lineHeight: 1.7,
+                color: 'rgba(255,255,255,0.35)',
+                margin: '0 0 24px',
+                maxWidth: 240,
+              }}
+            >
+              Premium websites and social media management for Australian businesses ready to grow.
             </p>
 
-            {/* Newsletter */}
-            <p
-              className="text-sm font-medium text-white mb-3"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              Stay in the loop.
-            </p>
-            {subscribed ? (
-              <p className="text-sm" style={{ color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}>
-                You're subscribed!
-              </p>
-            ) : (
-              <form onSubmit={handleSubscribe} className="flex gap-2">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  className="flex-1 min-w-0 px-3 py-2 rounded-lg text-sm outline-none"
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    color: 'white',
-                    fontFamily: 'Inter, sans-serif',
-                  }}
-                />
-                <button
-                  type="submit"
-                  className="px-3 py-2 rounded-lg text-sm font-semibold text-white flex-shrink-0"
-                  style={{ backgroundColor: '#FF5C00', fontFamily: 'Inter, sans-serif' }}
-                >
-                  Join
-                </button>
-              </form>
-            )}
-
-            {/* Social icons */}
-            <div className="flex gap-4 mt-6">
+            {/* Social */}
+            <div style={{ display: 'flex', gap: 14 }}>
               {[
                 { icon: <InstagramIcon />, label: 'Instagram', href: '#' },
-                { icon: <TikTokIcon />, label: 'TikTok', href: '#' },
-                { icon: <LinkedInIcon />, label: 'LinkedIn', href: '#' },
                 { icon: <FacebookIcon />, label: 'Facebook', href: '#' },
+                { icon: <LinkedInIcon />, label: 'LinkedIn', href: '#' },
               ].map(({ icon, label, href }) => (
-                <a
+                <motion.a
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="transition-colors hover:text-white"
-                  style={{ color: 'rgba(255,255,255,0.35)' }}
+                  whileHover={{ color: '#ffffff', y: -2 }}
+                  style={{ color: 'rgba(255,255,255,0.3)', transition: 'color 0.2s ease' }}
                 >
                   {icon}
-                </a>
+                </motion.a>
               ))}
             </div>
           </div>
 
-          {/* Col 2: Services */}
+          {/* Quick Links */}
           <div>
             <h4
-              className="text-xs uppercase tracking-[0.25em] mb-5 font-semibold"
-              style={{ color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                textTransform: 'uppercase' as const,
+                letterSpacing: '0.2em',
+                color: '#FF5C00',
+                marginBottom: 20,
+              }}
+            >
+              Quick Links
+            </h4>
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
+              {quickLinks.map((l) => (
+                <li key={l.label}>
+                  <a
+                    href={l.href}
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '0.88rem',
+                      color: 'rgba(255,255,255,0.38)',
+                      textDecoration: 'none',
+                      transition: 'color 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#ffffff')}
+                    onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'rgba(255,255,255,0.38)')}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h4
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                textTransform: 'uppercase' as const,
+                letterSpacing: '0.2em',
+                color: '#FF5C00',
+                marginBottom: 20,
+              }}
             >
               Services
             </h4>
-            <ul className="flex flex-col gap-3">
-              {services.map((s) => (
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
+              {[
+                'Website Design',
+                'Social Media Management',
+                'SEO Optimisation',
+                'Content Creation',
+                'Photography & Video',
+                'Paid Advertising',
+              ].map((s) => (
                 <li key={s}>
                   <a
-                    href="#"
-                    className="text-sm transition-colors hover:text-white"
-                    style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'Inter, sans-serif' }}
+                    href="#services"
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '0.88rem',
+                      color: 'rgba(255,255,255,0.38)',
+                      textDecoration: 'none',
+                      transition: 'color 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#ffffff')}
+                    onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'rgba(255,255,255,0.38)')}
                   >
                     {s}
                   </a>
@@ -202,86 +187,85 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: Marketplace */}
+          {/* Contact */}
           <div>
             <h4
-              className="text-xs uppercase tracking-[0.25em] mb-5 font-semibold"
-              style={{ color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                textTransform: 'uppercase' as const,
+                letterSpacing: '0.2em',
+                color: '#FF5C00',
+                marginBottom: 20,
+              }}
             >
-              Marketplace
+              Contact
             </h4>
-            <ul className="flex flex-col gap-3">
-              {marketplace.map((s) => (
-                <li key={s}>
-                  <a
-                    href="#"
-                    className="text-sm transition-colors hover:text-white"
-                    style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'Inter, sans-serif' }}
-                  >
-                    {s}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
+              <a
+                href="mailto:hello@launchables.com.au"
+                style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: 'rgba(255,255,255,0.38)', textDecoration: 'none' }}
+              >
+                hello@launchables.com.au
+              </a>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: 'rgba(255,255,255,0.38)' }}>
+                Australia
+              </span>
+            </div>
 
-          {/* Col 4: Company */}
-          <div>
-            <h4
-              className="text-xs uppercase tracking-[0.25em] mb-5 font-semibold"
-              style={{ color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}
+            <motion.a
+              href="#contact"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                marginTop: 24,
+                padding: '11px 20px',
+                borderRadius: '9999px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                color: '#ffffff',
+                backgroundColor: '#FF5C00',
+                textDecoration: 'none',
+                fontFamily: 'Inter, sans-serif',
+              }}
             >
-              Company
-            </h4>
-            <ul className="flex flex-col gap-3">
-              {company.map((s) => (
-                <li key={s}>
-                  <a
-                    href="#"
-                    className="text-sm transition-colors hover:text-white"
-                    style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'Inter, sans-serif' }}
-                  >
-                    {s}
-                  </a>
-                </li>
-              ))}
-            </ul>
+              Get Started
+            </motion.a>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
+          style={{
+            borderTop: '1px solid rgba(255,255,255,0.06)',
+            paddingTop: 24,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 12,
+          }}
         >
-          <p
-            className="text-xs"
-            style={{ color: 'rgba(255,255,255,0.25)', fontFamily: 'Inter, sans-serif' }}
-          >
-            &copy; 2025 Launchables. All rights reserved.
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'rgba(255,255,255,0.2)', margin: 0 }}>
+            © 2025 Launchables. All rights reserved.
           </p>
-
-          <div className="flex gap-5">
-            {['Privacy Policy', 'Terms', 'Sitemap'].map((l) => (
+          <div style={{ display: 'flex', gap: 20 }}>
+            {['Privacy Policy', 'Terms of Service'].map((l) => (
               <a
                 key={l}
                 href="#"
-                className="text-xs transition-colors hover:text-white"
-                style={{ color: 'rgba(255,255,255,0.25)', fontFamily: 'Inter, sans-serif' }}
+                style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'rgba(255,255,255,0.2)', textDecoration: 'none' }}
               >
                 {l}
               </a>
             ))}
           </div>
-
-          <p
-            className="text-xs"
-            style={{ color: 'rgba(255,255,255,0.25)', fontFamily: 'Inter, sans-serif' }}
-          >
-            Trusted by 340+ businesses across Australia
-          </p>
         </div>
       </div>
     </footer>
-  );
+  )
 }

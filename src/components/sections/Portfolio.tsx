@@ -1,692 +1,375 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ExternalLink, TrendingUp } from "lucide-react";
+import { useState, useRef } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 
-const BRAND = {
-  dark: "#111111",
-  surface: "#1A1A1A",
-  offwhite: "#F8F7F4",
-  orange: "#FF5C00",
-  coral: "#FF7A5C",
-};
+const FILTERS = ['All', 'Websites', 'Trades', 'Hospitality', 'Services', 'Health']
 
-/* ─────────────────────── Browser Mockup ─────────────────────── */
-function BrowserMockup({
-  gradientFrom,
-  gradientTo,
-  accentColor,
-  height = 300,
-  projectName,
-  children,
-}: {
-  gradientFrom: string;
-  gradientTo: string;
-  accentColor: string;
-  height?: number;
-  projectName?: string;
-  children?: React.ReactNode;
-}) {
+const projects = [
+  {
+    name: 'Apex Plumbing',
+    category: 'Trades',
+    tagline: 'Local plumber, national quality.',
+    result: '+340% organic traffic',
+    gradientFrom: '#1e3a5f',
+    gradientTo: '#0a1628',
+    accent: '#3B82F6',
+    url: 'apexplumbing.com.au',
+  },
+  {
+    name: 'Nova Coffee',
+    category: 'Hospitality',
+    tagline: 'Where every cup tells a story.',
+    result: '15K followers in 90 days',
+    gradientFrom: '#2c1810',
+    gradientTo: '#0f0804',
+    accent: '#D97706',
+    url: 'novacoffee.com.au',
+  },
+  {
+    name: 'The Styling Room',
+    category: 'Services',
+    tagline: 'Beauty on your terms.',
+    result: '3× more enquiries',
+    gradientFrom: '#3d1a2e',
+    gradientTo: '#150a12',
+    accent: '#EC4899',
+    url: 'thestylingroom.com.au',
+  },
+  {
+    name: 'Greenpath Landscaping',
+    category: 'Services',
+    tagline: 'Gardens that last a lifetime.',
+    result: '#1 Google ranking in 8 weeks',
+    gradientFrom: '#0f2d1a',
+    gradientTo: '#061109',
+    accent: '#22C55E',
+    url: 'greenpath.com.au',
+  },
+  {
+    name: 'CleanPro Services',
+    category: 'Services',
+    tagline: 'Spotless. Every time.',
+    result: 'Launched in 3 weeks',
+    gradientFrom: '#1a2d3d',
+    gradientTo: '#091118',
+    accent: '#0EA5E9',
+    url: 'cleanproservices.com.au',
+  },
+  {
+    name: 'Summit Health',
+    category: 'Health',
+    tagline: 'Your health. Optimised.',
+    result: '200+ new patients in month one',
+    gradientFrom: '#2d1a3d',
+    gradientTo: '#120a18',
+    accent: '#8B5CF6',
+    url: 'summithealth.com.au',
+  },
+]
+
+function BrowserCard({ project }: { project: typeof projects[0] }) {
+  const [hovered, setHovered] = useState(false)
+
   return (
-    <div
+    <motion.div
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       style={{
-        borderRadius: 14,
-        overflow: "hidden",
-        boxShadow: "0 16px 48px rgba(0,0,0,0.18)",
-        background: "#D1D5DB",
-        height,
-        display: "flex",
-        flexDirection: "column",
-        flexShrink: 0,
+        borderRadius: 16,
+        overflow: 'hidden',
+        boxShadow: hovered
+          ? '0 24px 60px rgba(0,0,0,0.25)'
+          : '0 8px 32px rgba(0,0,0,0.12)',
+        background: '#1A1A1A',
+        cursor: 'pointer',
+        transition: 'box-shadow 0.35s ease',
       }}
     >
-      {/* Chrome */}
+      {/* Browser chrome */}
       <div
         style={{
-          height: 36,
-          background: "#D1D5DB",
-          display: "flex",
-          alignItems: "center",
-          padding: "0 14px",
+          height: 38,
+          background: '#242424',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 14px',
           gap: 7,
+          borderBottom: '1px solid rgba(255,255,255,0.05)',
           flexShrink: 0,
         }}
       >
-        <span style={{ width: 12, height: 12, borderRadius: "50%", background: "#EF4444", display: "block" }} />
-        <span style={{ width: 12, height: 12, borderRadius: "50%", background: "#F59E0B", display: "block" }} />
-        <span style={{ width: 12, height: 12, borderRadius: "50%", background: "#22C55E", display: "block" }} />
+        <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#EF4444', display: 'block' }} />
+        <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#F59E0B', display: 'block' }} />
+        <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#22C55E', display: 'block' }} />
         <div
           style={{
             flex: 1,
             marginLeft: 10,
             height: 22,
-            background: "#E5E7EB",
+            background: 'rgba(255,255,255,0.05)',
             borderRadius: 6,
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             paddingLeft: 10,
           }}
         >
-          <span style={{ fontSize: 10, color: "#9CA3AF", fontFamily: "monospace" }}>
-            launchables.co/{projectName?.toLowerCase().replace(/\s+/g, "-") ?? "work"}
+          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', fontFamily: 'monospace' }}>
+            {project.url}
           </span>
         </div>
       </div>
 
-      {/* Content */}
+      {/* Website preview */}
       <div
         style={{
-          flex: 1,
-          background: `linear-gradient(135deg, ${gradientFrom} 0%, ${gradientTo} 100%)`,
-          padding: 20,
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-          position: "relative",
-          overflow: "hidden",
+          height: 220,
+          background: `linear-gradient(135deg, ${project.gradientFrom}, ${project.gradientTo})`,
+          position: 'relative' as const,
+          overflow: 'hidden',
+          padding: '20px 18px',
         }}
       >
-        {/* Nav */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, height: 28, background: "rgba(255,255,255,0.12)", borderRadius: 6, padding: "0 12px" }}>
-          <div style={{ width: 48, height: 10, background: accentColor, borderRadius: 2 }} />
-          <div style={{ flex: 1 }} />
-          {[1, 2, 3].map((i) => (
-            <div key={i} style={{ width: 24, height: 8, background: "rgba(255,255,255,0.25)", borderRadius: 2 }} />
-          ))}
+        {/* Accent glow */}
+        <div style={{
+          position: 'absolute',
+          top: -20,
+          right: -20,
+          width: 120,
+          height: 120,
+          borderRadius: '50%',
+          background: `radial-gradient(circle, ${project.accent}30 0%, transparent 70%)`,
+        }} />
+
+        {/* Mock nav */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <div style={{ width: 60, height: 8, background: 'rgba(255,255,255,0.15)', borderRadius: 4 }} />
+          <div style={{ display: 'flex', gap: 8 }}>
+            {[40, 35, 40].map((w, j) => <div key={j} style={{ width: w, height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 3 }} />)}
+          </div>
+          <div style={{ width: 50, height: 22, borderRadius: 12, background: project.accent }} />
         </div>
 
-        {/* Hero */}
-        <div style={{ display: "flex", gap: 16, flex: 1 }}>
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8, justifyContent: "center" }}>
-            <div style={{ height: 16, background: "rgba(255,255,255,0.9)", borderRadius: 4, width: "75%" }} />
-            <div style={{ height: 10, background: "rgba(255,255,255,0.5)", borderRadius: 3, width: "55%" }} />
-            <div style={{ height: 10, background: "rgba(255,255,255,0.4)", borderRadius: 3, width: "65%" }} />
-            <div style={{ marginTop: 6, height: 26, width: 80, background: accentColor, borderRadius: 6, opacity: 0.95 }} />
-          </div>
+        {/* Mock hero text */}
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ width: '75%', height: 14, background: 'rgba(255,255,255,0.2)', borderRadius: 4, marginBottom: 8 }} />
+          <div style={{ width: '55%', height: 14, background: 'rgba(255,255,255,0.2)', borderRadius: 4, marginBottom: 12 }} />
+          <div style={{ width: '85%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 3, marginBottom: 5 }} />
+          <div style={{ width: '65%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 3 }} />
+        </div>
+
+        {/* Overlay on hover */}
+        <motion.div
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.25 }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <div
             style={{
-              width: "35%",
-              background: "rgba(255,255,255,0.1)",
-              borderRadius: 8,
-              border: "1px solid rgba(255,255,255,0.15)",
+              width: 44,
+              height: 44,
+              borderRadius: '50%',
+              background: '#FF5C00',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-          />
-        </div>
-
-        {/* Stat blocks */}
-        <div style={{ display: "flex", gap: 8 }}>
-          {[0.15, 0.1, 0.1].map((op, i) => (
-            <div key={i} style={{ flex: 1, height: 36, background: `rgba(255,255,255,${op})`, borderRadius: 6 }} />
-          ))}
-        </div>
-
-        {/* Reflection */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            top: 0,
-            height: "38%",
-            background: "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 100%)",
-            pointerEvents: "none",
-          }}
-        />
-
-        {children}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────── Featured project ─────────────────────── */
-const FEATURED = {
-  name: "Agency Studio",
-  category: "Agency Website",
-  result: "40+ new client enquiries/month",
-  tags: ["Web Design", "Branding", "SEO"],
-  gradientFrom: "#111111",
-  gradientTo: "#2D0F00",
-  accentColor: "#FF5C00",
-};
-
-/* ─────────────────────── Projects ─────────────────────── */
-interface Project {
-  name: string;
-  category: string;
-  metric: string;
-  gradientFrom: string;
-  gradientTo: string;
-  accentColor: string;
-  description: string;
-}
-
-const PROJECTS: Project[] = [
-  {
-    name: "Apex Plumbing",
-    category: "Trades Website",
-    metric: "+380% organic traffic",
-    gradientFrom: "#1B4332",
-    gradientTo: "#2D6A4F",
-    accentColor: "#52B788",
-    description: "Full rebrand + local SEO optimisation drove record search rankings.",
-  },
-  {
-    name: "Nova Coffee",
-    category: "Restaurant Brand + Website",
-    metric: "220% increase in bookings",
-    gradientFrom: "#431407",
-    gradientTo: "#7C2D12",
-    accentColor: "#FB923C",
-    description: "Custom reservation system and brand identity for a specialty coffee roaster.",
-  },
-  {
-    name: "Clearform AI",
-    category: "SaaS Landing Page",
-    metric: "4.8% conversion rate",
-    gradientFrom: "#0C4A6E",
-    gradientTo: "#0369A1",
-    accentColor: "#38BDF8",
-    description: "High-performance landing page engineered around user psychology.",
-  },
-  {
-    name: "Velocity Gym",
-    category: "Fitness Brand + Social",
-    metric: "12,000 new followers in 90 days",
-    gradientFrom: "#1E1B4B",
-    gradientTo: "#4338CA",
-    accentColor: "#818CF8",
-    description: "Social-first content strategy that built a loyal community from scratch.",
-  },
-  {
-    name: "The Styling Room",
-    category: "E-commerce",
-    metric: "$180K in first 6 months",
-    gradientFrom: "#2D1B69",
-    gradientTo: "#7C3AED",
-    accentColor: "#C4B5FD",
-    description: "End-to-end ecommerce build with product photography art direction.",
-  },
-  {
-    name: "Greenpath Landscaping",
-    category: "Local SEO + Website",
-    metric: "#1 Google ranking",
-    gradientFrom: "#14532D",
-    gradientTo: "#166534",
-    accentColor: "#4ADE80",
-    description: "Technical SEO overhaul captured top local search position within 4 months.",
-  },
-  {
-    name: "Summit Events",
-    category: "Events Brand",
-    metric: "3x ticket sales",
-    gradientFrom: "#7C2D12",
-    gradientTo: "#B45309",
-    accentColor: "#FCD34D",
-    description: "Event brand and campaign that sold out three consecutive shows.",
-  },
-  {
-    name: "Orbit Digital",
-    category: "Agency Website",
-    metric: "40+ new client enquiries/month",
-    gradientFrom: "#0F172A",
-    gradientTo: "#1E3A5F",
-    accentColor: "#60A5FA",
-    description: "Award-winning agency site that became a conversion machine.",
-  },
-];
-
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: Math.min(index * 0.08, 0.4) }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 0,
-        borderRadius: 20,
-        overflow: "hidden",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
-        background: "#fff",
-        border: "1px solid #E5E7EB",
-        cursor: "pointer",
-      }}
-    >
-      {/* Mockup with hover overlay */}
-      <div style={{ position: "relative", height: 300 }}>
-        <BrowserMockup
-          gradientFrom={project.gradientFrom}
-          gradientTo={project.gradientTo}
-          accentColor={project.accentColor}
-          height={300}
-          projectName={project.name}
-        />
-        <AnimatePresence>
-          {hovered && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: "rgba(17,17,17,0.82)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 12,
-                padding: 24,
-                textAlign: "center",
-              }}
-            >
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: 14,
-                  color: "rgba(255,255,255,0.7)",
-                  fontFamily: "'Inter', sans-serif",
-                  lineHeight: 1.5,
-                }}
-              >
-                {project.description}
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  padding: "10px 22px",
-                  background: BRAND.orange,
-                  border: "none",
-                  borderRadius: 10,
-                  color: "#fff",
-                  fontSize: 13,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                }}
-              >
-                <ExternalLink size={13} /> View Project
-              </motion.button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M3 9h12M10 4l5 5-5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Card body */}
-      <div style={{ padding: "18px 20px 22px", display: "flex", flexDirection: "column", gap: 8 }}>
-        <span
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            letterSpacing: "0.06em",
-            color: BRAND.orange,
-            textTransform: "uppercase",
-            fontFamily: "'Space Grotesk', sans-serif",
-          }}
-        >
-          {project.category}
-        </span>
-        <h3
-          style={{
-            margin: 0,
-            fontSize: 18,
-            fontWeight: 700,
-            color: BRAND.dark,
-            fontFamily: "'Space Grotesk', sans-serif",
-          }}
-        >
-          {project.name}
-        </h3>
+      {/* Card info */}
+      <div style={{ padding: '20px 20px 22px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+          <h3 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#ffffff', margin: 0 }}>
+            {project.name}
+          </h3>
+          <span
+            style={{
+              fontSize: '0.65rem',
+              fontWeight: 600,
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.12em',
+              color: project.accent,
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
+            {project.category}
+          </span>
+        </div>
+        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: 'rgba(255,255,255,0.35)', margin: '0 0 12px' }}>
+          {project.tagline}
+        </p>
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
+            display: 'inline-flex',
+            alignItems: 'center',
             gap: 6,
-            fontSize: 13,
-            fontWeight: 700,
-            color: "#22C55E",
-            fontFamily: "'Space Grotesk', sans-serif",
+            padding: '5px 10px',
+            borderRadius: 20,
+            background: 'rgba(255,92,0,0.12)',
           }}
         >
-          <TrendingUp size={14} /> {project.metric}
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="#FF5C00">
+            <path d="M1 7l2-2 2 1.5L7 3l2 1.5" stroke="#FF5C00" strokeWidth="1" strokeLinecap="round" fill="none" />
+          </svg>
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}>
+            {project.result}
+          </span>
         </div>
       </div>
     </motion.div>
-  );
+  )
 }
 
-/* ─────────────────────── Main ─────────────────────── */
 export default function Portfolio() {
+  const [active, setActive] = useState('All')
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  const filtered = active === 'All' ? projects : projects.filter((p) => p.category === active)
+
   return (
-    <section
-      id="portfolio"
-      style={{
-        background: BRAND.offwhite,
-        padding: "100px 0 120px",
-        fontFamily: "'Inter', sans-serif",
-      }}
-    >
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: 72 }}
-        >
-          <p
+    <section id="portfolio" style={{ backgroundColor: '#111111', padding: '120px 24px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div ref={ref} style={{ marginBottom: 56 }}>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
             style={{
-              fontSize: 13,
-              fontWeight: 700,
-              letterSpacing: "0.12em",
-              color: BRAND.orange,
-              textTransform: "uppercase",
-              marginBottom: 12,
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.2em',
+              color: '#FF5C00',
+              fontFamily: 'Inter, sans-serif',
+              marginBottom: 16,
             }}
           >
             Our Work
-          </p>
-          <h2
-            style={{
-              fontSize: "clamp(32px, 5vw, 60px)",
-              fontWeight: 800,
-              color: BRAND.dark,
-              margin: "0 0 16px",
-              fontFamily: "'Space Grotesk', sans-serif",
-              lineHeight: 1.1,
-            }}
-          >
-            Our Work{" "}
-            <span style={{ color: BRAND.orange }}>Speaks.</span>
-          </h2>
-          <p
-            style={{
-              fontSize: 18,
-              color: "#6B7280",
-              maxWidth: 500,
-              margin: "0 auto",
-              lineHeight: 1.6,
-            }}
-          >
-            Every project is built to perform as good as it looks.
-          </p>
-        </motion.div>
-
-        {/* Featured project */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 60,
-            alignItems: "center",
-            marginBottom: 80,
-            background: "#fff",
-            borderRadius: 28,
-            padding: "48px 48px",
-            boxShadow: "0 12px 48px rgba(0,0,0,0.09)",
-            border: "1px solid #E5E7EB",
-          }}
-        >
-          {/* Text */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <div>
-              <span
-                style={{
-                  fontSize: 12,
-                  fontWeight: 700,
-                  letterSpacing: "0.1em",
-                  color: BRAND.orange,
-                  textTransform: "uppercase",
-                  fontFamily: "'Space Grotesk', sans-serif",
-                }}
-              >
-                Featured Project
-              </span>
-            </div>
-            <h3
+          </motion.p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24 }}>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               style={{
-                margin: 0,
-                fontSize: "clamp(28px, 4vw, 44px)",
-                fontWeight: 800,
-                color: BRAND.dark,
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontWeight: 700,
+                fontSize: 'clamp(2rem, 4vw, 3rem)',
                 lineHeight: 1.1,
+                letterSpacing: '-0.03em',
+                color: '#ffffff',
+                margin: 0,
               }}
             >
-              {FEATURED.name}
-            </h3>
-            <p style={{ margin: 0, fontSize: 15, color: "#6B7280", fontFamily: "'Inter', sans-serif" }}>
-              {FEATURED.category}
-            </p>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "14px 20px",
-                background: "#F0FDF4",
-                borderRadius: 12,
-                border: "1px solid #BBF7D0",
-              }}
+              Websites that get results.
+            </motion.h2>
+
+            {/* Filter pills */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
             >
-              <TrendingUp size={18} color="#16A34A" />
-              <span
-                style={{
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: "#16A34A",
-                  fontFamily: "'Space Grotesk', sans-serif",
-                }}
-              >
-                {FEATURED.result}
-              </span>
-            </div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {FEATURED.tags.map((tag) => (
-                <span
-                  key={tag}
+              {FILTERS.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setActive(f)}
                   style={{
-                    fontSize: 12,
+                    padding: '8px 16px',
+                    borderRadius: '9999px',
+                    fontSize: '0.8rem',
                     fontWeight: 600,
-                    padding: "5px 14px",
-                    borderRadius: 99,
-                    background: `${BRAND.orange}12`,
-                    color: BRAND.orange,
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    border: `1px solid ${BRAND.orange}30`,
+                    fontFamily: 'Inter, sans-serif',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    border: active === f ? 'none' : '1px solid rgba(255,255,255,0.12)',
+                    background: active === f ? '#FF5C00' : 'transparent',
+                    color: active === f ? '#ffffff' : 'rgba(255,255,255,0.45)',
                   }}
                 >
-                  {tag}
-                </span>
+                  {f}
+                </button>
               ))}
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              style={{
-                alignSelf: "flex-start",
-                padding: "12px 28px",
-                background: BRAND.dark,
-                border: "none",
-                borderRadius: 12,
-                color: "#fff",
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: "pointer",
-                fontFamily: "'Space Grotesk', sans-serif",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              View Case Study <ArrowRight size={15} />
-            </motion.button>
+            </motion.div>
           </div>
-
-          {/* Browser mockup */}
-          <div>
-            <BrowserMockup
-              gradientFrom={FEATURED.gradientFrom}
-              gradientTo={FEATURED.gradientTo}
-              accentColor={FEATURED.accentColor}
-              height={380}
-              projectName={FEATURED.name}
-            />
-          </div>
-        </motion.div>
-
-        {/* Project grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-            gap: 28,
-            marginBottom: 80,
-          }}
-        >
-          {PROJECTS.map((project, index) => (
-            <ProjectCard key={project.name} project={project} index={index} />
-          ))}
         </div>
 
-        {/* CTA */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+              gap: 20,
+            }}
+          >
+            {filtered.map((p, i) => (
+              <motion.div
+                key={p.name}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <BrowserCard project={p} />
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{
-            background: BRAND.dark,
-            borderRadius: 28,
-            padding: "64px 48px",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-          }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          style={{ textAlign: 'center', marginTop: 56 }}
         >
-          {/* Decorative gradient blob */}
-          <div
+          <motion.a
+            href="#contact"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             style={{
-              position: "absolute",
-              top: "-60px",
-              right: "-60px",
-              width: 300,
-              height: 300,
-              borderRadius: "50%",
-              background: `radial-gradient(circle, ${BRAND.orange}30 0%, transparent 70%)`,
-              pointerEvents: "none",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-80px",
-              left: "-40px",
-              width: 240,
-              height: 240,
-              borderRadius: "50%",
-              background: `radial-gradient(circle, ${BRAND.coral}20 0%, transparent 70%)`,
-              pointerEvents: "none",
-            }}
-          />
-
-          <p
-            style={{
-              margin: "0 0 16px",
-              fontSize: 13,
-              fontWeight: 700,
-              letterSpacing: "0.12em",
-              color: BRAND.orange,
-              textTransform: "uppercase",
-              fontFamily: "'Space Grotesk', sans-serif",
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '14px 32px',
+              borderRadius: '9999px',
+              fontSize: '0.95rem',
+              fontWeight: 600,
+              color: '#ffffff',
+              backgroundColor: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              textDecoration: 'none',
+              fontFamily: 'Inter, sans-serif',
             }}
           >
-            Ready to Build?
-          </p>
-          <h3
-            style={{
-              margin: "0 0 16px",
-              fontSize: "clamp(28px, 4vw, 48px)",
-              fontWeight: 800,
-              color: BRAND.offwhite,
-              fontFamily: "'Space Grotesk', sans-serif",
-              lineHeight: 1.1,
-              position: "relative",
-            }}
-          >
-            Work with us.
-          </h3>
-          <p
-            style={{
-              margin: "0 0 36px",
-              fontSize: 17,
-              color: "#6B7280",
-              maxWidth: 480,
-              marginInline: "auto",
-              lineHeight: 1.6,
-            }}
-          >
-            Let&apos;s build something your competitors will be jealous of. Book a free strategy call today.
-          </p>
-          <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", position: "relative" }}>
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              style={{
-                padding: "14px 36px",
-                background: BRAND.orange,
-                border: "none",
-                borderRadius: 12,
-                color: "#fff",
-                fontSize: 15,
-                fontWeight: 700,
-                cursor: "pointer",
-                fontFamily: "'Space Grotesk', sans-serif",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              Book a Free Strategy Call <ArrowRight size={16} />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              style={{
-                padding: "14px 36px",
-                background: "transparent",
-                border: "1.5px solid #2A2A2A",
-                borderRadius: 12,
-                color: BRAND.offwhite,
-                fontSize: 15,
-                fontWeight: 700,
-                cursor: "pointer",
-                fontFamily: "'Space Grotesk', sans-serif",
-              }}
-            >
-              View More Work
-            </motion.button>
-          </div>
+            Start Your Project
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </motion.a>
         </motion.div>
       </div>
     </section>
-  );
+  )
 }

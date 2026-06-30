@@ -3,11 +3,12 @@ import { motion, AnimatePresence, useScroll } from 'framer-motion'
 import MagneticButton from '../ui/MagneticButton'
 
 const NAV_LINKS = [
-  { label: 'Services', href: '#services' },
-  { label: 'Marketplace', href: '#marketplace' },
+  { label: 'Websites', href: '#services' },
+  { label: 'Social Media', href: '#services' },
   { label: 'Portfolio', href: '#portfolio' },
+  { label: 'Pricing', href: '#pricing' },
   { label: 'About', href: '#about' },
-  { label: 'Blog', href: '#blog' },
+  { label: 'Contact', href: '#contact' },
 ]
 
 function NavLink({
@@ -33,7 +34,7 @@ function NavLink({
       {label}
       <motion.span
         className="absolute -bottom-0.5 left-0 h-px w-full origin-left"
-        style={{ backgroundColor: scrolled ? '#111111' : '#ffffff' }}
+        style={{ backgroundColor: scrolled ? '#FF5C00' : '#FF5C00' }}
         initial={{ scaleX: 0 }}
         whileHover={{ scaleX: 1 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
@@ -99,7 +100,7 @@ export default function Nav() {
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link, i) => (
-              <NavLink key={link.href} {...link} scrolled={scrolled} index={i} />
+              <NavLink key={link.label} {...link} scrolled={scrolled} index={i} />
             ))}
           </div>
 
@@ -155,7 +156,7 @@ export default function Nav() {
             <div className="flex flex-col items-center justify-center h-full gap-2">
               {NAV_LINKS.map((link, i) => (
                 <motion.a
-                  key={link.href}
+                  key={link.label}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
                   className="text-4xl font-bold text-white tracking-tight py-3"
@@ -187,7 +188,6 @@ export default function Nav() {
               </motion.div>
             </div>
 
-            {/* Decorative glow */}
             <div
               className="absolute bottom-0 right-0 w-72 h-72 rounded-full pointer-events-none"
               style={{

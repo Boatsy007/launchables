@@ -1,230 +1,94 @@
-import { useRef, useMemo, useState, useEffect, Suspense } from 'react'
 import { motion } from 'framer-motion'
-import * as THREE from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { AdaptiveDpr, AdaptiveEvents } from '@react-three/drei'
 
-// ─── WebGL support detection ──────────────────────────────────────────────────
-function isWebGLSupported(): boolean {
-  try {
-    const canvas = document.createElement('canvas')
-    return !!(
-      canvas.getContext('webgl2') ||
-      canvas.getContext('webgl') ||
-      (canvas.getContext as (id: string) => RenderingContext | null)('experimental-webgl')
-    )
-  } catch {
-    return false
-  }
-}
-
-// ─── Shared mouse ref type ────────────────────────────────────────────────────
-interface MouseState {
-  x: number
-  y: number
-  targetX: number
-  targetY: number
-}
-
-// ─── Particle Field ───────────────────────────────────────────────────────────
-function ParticleField({ mouseRef }: { mouseRef: React.MutableRefObject<MouseState> }) {
-  const meshRef = useRef<THREE.Points>(null)
-
-  const { positions, colors } = useMemo(() => {
-    const count = 2000
-    const positions = new Float32Array(count * 3)
-    const colors = new Float32Array(count * 3)
-
-    const palette = [
-      new THREE.Color('#FF5C00'),
-      new THREE.Color('#FF7A5C'),
-      new THREE.Color('#ffffff'),
-      new THREE.Color('#FF8533'),
-      new THREE.Color('#ffccbb'),
-    ]
-
-    for (let i = 0; i < count; i++) {
-      const radius = Math.random() * 6 + 1
-      const phi = Math.acos(2 * Math.random() - 1)
-      const theta = Math.random() * Math.PI * 2
-      const arm = Math.floor(Math.random() * 3) * ((Math.PI * 2) / 3)
-      const spiral = theta + arm + radius * 0.3
-
-      positions[i * 3] = radius * Math.sin(phi) * Math.cos(spiral)
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 2.5
-      positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(spiral)
-
-      const c = palette[Math.floor(Math.random() * palette.length)]
-      const brightness = 0.5 + Math.random() * 0.5
-      colors[i * 3] = c.r * brightness
-      colors[i * 3 + 1] = c.g * brightness
-      colors[i * 3 + 2] = c.b * brightness
-    }
-
-    return { positions, colors }
-  }, [])
-
-  useFrame(() => {
-    if (!meshRef.current) return
-    meshRef.current.rotation.y += 0.0003
-
-    mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.04
-    mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.04
-
-    meshRef.current.rotation.x = mouseRef.current.y * 0.08
-    meshRef.current.rotation.z = mouseRef.current.x * 0.04
-  })
-
-  return (
-    <points ref={meshRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.022}
-        vertexColors
-        transparent
-        opacity={0.85}
-        sizeAttenuation
-        depthWrite={false}
-      />
-    </points>
-  )
-}
-
-// ─── Floating Orbs ────────────────────────────────────────────────────────────
-const ORB_DATA: Array<{
-  pos: [number, number, number]
-  radius: number
-  color: string
-  speed: number
-  phase: number
-}> = [
-  { pos: [2.2, 0.8, -1.5], radius: 0.55, color: '#FF5C00', speed: 0.6, phase: 0 },
-  { pos: [-2.5, -0.4, -2.0], radius: 0.38, color: '#FF7A5C', speed: 0.9, phase: 1.2 },
-  { pos: [1.0, -1.5, -0.8], radius: 0.28, color: '#ffffff', speed: 1.1, phase: 2.4 },
-  { pos: [-1.4, 1.5, -1.2], radius: 0.45, color: '#FF5C00', speed: 0.7, phase: 0.7 },
-  { pos: [3.0, -0.8, -3.0], radius: 0.62, color: '#FF8533', speed: 0.5, phase: 3.1 },
-  { pos: [-3.2, 0.5, -2.5], radius: 0.3, color: '#FF7A5C', speed: 1.3, phase: 1.8 },
-  { pos: [0.5, 2.2, -1.8], radius: 0.22, color: '#ffffff', speed: 1.5, phase: 0.3 },
-  { pos: [-0.8, -2.0, -0.5], radius: 0.5, color: '#FF5C00', speed: 0.8, phase: 2.1 },
-  { pos: [2.8, 1.5, -2.2], radius: 0.2, color: '#FF7A5C', speed: 1.2, phase: 1.5 },
-  { pos: [-2.0, -1.2, -1.0], radius: 0.35, color: '#FF8533', speed: 0.65, phase: 0.9 },
-  { pos: [1.5, -2.5, -2.8], radius: 0.42, color: '#ffffff', speed: 1.0, phase: 2.8 },
-  { pos: [-0.3, 1.0, -0.3], radius: 0.18, color: '#FF5C00', speed: 1.4, phase: 1.0 },
-]
-
-function FloatingOrb({
-  pos,
-  radius,
-  color,
-  speed,
-  phase,
-  mouseRef,
-}: {
-  pos: [number, number, number]
-  radius: number
-  color: string
-  speed: number
-  phase: number
-  mouseRef: React.MutableRefObject<MouseState>
-}) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  const originX = pos[0]
-  const originY = pos[1]
-  const originZ = pos[2]
-
-  useFrame(({ clock }) => {
-    if (!meshRef.current) return
-    const t = clock.elapsedTime
-    const bobY = Math.sin(t * speed + phase) * 0.18
-    const bobX = Math.cos(t * speed * 0.7 + phase) * 0.06
-    const mx = mouseRef.current.x * 0.25
-    const my = mouseRef.current.y * 0.25
-
-    meshRef.current.position.x = originX + bobX + mx * radius * 0.5
-    meshRef.current.position.y = originY + bobY + my * radius * 0.5
-    meshRef.current.position.z = originZ
-  })
-
-  const threeColor = useMemo(() => new THREE.Color(color), [color])
-
-  return (
-    <mesh ref={meshRef} position={pos} castShadow={false} receiveShadow={false}>
-      <sphereGeometry args={[radius, 24, 24]} />
-      <meshStandardMaterial
-        color={threeColor}
-        emissive={threeColor}
-        emissiveIntensity={0.6}
-        roughness={0.1}
-        metalness={0.2}
-        transparent
-        opacity={0.88}
-      />
-    </mesh>
-  )
-}
-
-function FloatingOrbs({ mouseRef }: { mouseRef: React.MutableRefObject<MouseState> }) {
-  return (
-    <>
-      {ORB_DATA.map((orb, i) => (
-        <FloatingOrb key={i} {...orb} mouseRef={mouseRef} />
-      ))}
-    </>
-  )
-}
-
-// ─── Three.js Scene ───────────────────────────────────────────────────────────
-function Scene({ mouseRef }: { mouseRef: React.MutableRefObject<MouseState> }) {
-  return (
-    <>
-      <ambientLight intensity={0.15} />
-      <pointLight position={[2, 2, 2]} intensity={60} color="#FF5C00" />
-      <pointLight position={[-2, -1, 3]} intensity={40} color="#FF7A5C" />
-      <pointLight position={[0, 0, 4]} intensity={20} color="#ffffff" />
-      <ParticleField mouseRef={mouseRef} />
-      <FloatingOrbs mouseRef={mouseRef} />
-    </>
-  )
-}
-
-// ─── CSS Fallback ─────────────────────────────────────────────────────────────
-function FallbackBackground() {
+// ─── Browser Mockup ───────────────────────────────────────────────────────────
+function BrowserMockup() {
   return (
     <div
-      className="absolute inset-0"
       style={{
-        background:
-          'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,92,0,0.18) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 20%, rgba(255,122,92,0.12) 0%, transparent 60%), #111111',
+        borderRadius: 16,
+        overflow: 'hidden',
+        boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)',
+        background: '#1A1A1A',
       }}
     >
-      {[
-        { size: 320, left: '15%', top: '20%', color: 'rgba(255,92,0,0.12)', dur: 8 },
-        { size: 240, left: '70%', top: '50%', color: 'rgba(255,122,92,0.10)', dur: 10 },
-        { size: 180, left: '40%', top: '70%', color: 'rgba(255,92,0,0.08)', dur: 12 },
-      ].map((b, i) => (
+      {/* Chrome bar */}
+      <div
+        style={{
+          height: 42,
+          background: '#242424',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 16px',
+          gap: 8,
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
+        <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#EF4444', display: 'block' }} />
+        <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#F59E0B', display: 'block' }} />
+        <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#22C55E', display: 'block' }} />
         <div
-          key={i}
-          className="absolute rounded-full"
           style={{
-            width: b.size,
-            height: b.size,
-            left: b.left,
-            top: b.top,
-            background: `radial-gradient(circle, ${b.color} 0%, transparent 70%)`,
-            animation: `heroFloat ${b.dur}s ease-in-out infinite`,
-            animationDelay: `${i * 2}s`,
+            flex: 1,
+            marginLeft: 12,
+            height: 26,
+            background: 'rgba(255,255,255,0.06)',
+            borderRadius: 8,
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: 12,
           }}
-        />
-      ))}
+        >
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', fontFamily: 'monospace' }}>
+            yourwebsite.com.au
+          </span>
+        </div>
+      </div>
+
+      {/* Website preview */}
+      <div style={{ padding: '28px 24px', minHeight: 320 }}>
+        {/* Nav mockup */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+          <div style={{ width: 90, height: 10, background: 'rgba(255,255,255,0.12)', borderRadius: 5 }} />
+          <div style={{ display: 'flex', gap: 12 }}>
+            {[60, 50, 55, 40].map((w, i) => (
+              <div key={i} style={{ width: w, height: 8, background: 'rgba(255,255,255,0.07)', borderRadius: 4 }} />
+            ))}
+          </div>
+          <div style={{ width: 70, height: 28, background: '#FF5C00', borderRadius: 20 }} />
+        </div>
+
+        {/* Hero text mockup */}
+        <div style={{ maxWidth: 340, marginBottom: 24 }}>
+          <div style={{ width: '90%', height: 18, background: 'rgba(255,255,255,0.15)', borderRadius: 6, marginBottom: 10 }} />
+          <div style={{ width: '70%', height: 18, background: 'rgba(255,255,255,0.15)', borderRadius: 6, marginBottom: 18 }} />
+          <div style={{ width: '100%', height: 9, background: 'rgba(255,255,255,0.06)', borderRadius: 4, marginBottom: 6 }} />
+          <div style={{ width: '80%', height: 9, background: 'rgba(255,255,255,0.06)', borderRadius: 4, marginBottom: 20 }} />
+          <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ width: 90, height: 32, background: '#FF5C00', borderRadius: 20 }} />
+            <div style={{ width: 100, height: 32, background: 'rgba(255,255,255,0.08)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.12)' }} />
+          </div>
+        </div>
+
+        {/* Stats row */}
+        <div style={{ display: 'flex', gap: 16, marginTop: 28 }}>
+          {[
+            { val: '340%', label: 'More leads' },
+            { val: '3 wks', label: 'Delivery' },
+            { val: '100', label: 'Lighthouse' },
+          ].map((s, i) => (
+            <div key={i} style={{ flex: 1, background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '12px 14px', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#FF5C00', fontFamily: 'Space Grotesk, sans-serif', marginBottom: 3 }}>{s.val}</div>
+              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', fontFamily: 'Inter, sans-serif' }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
 
-// ─── Animated headline word-by-word ──────────────────────────────────────────
-const HEADLINE_WORDS = ['Launch', 'Businesses', 'Worth', 'Remembering.']
+// ─── Animated headline ────────────────────────────────────────────────────────
+const HEADLINE = ['Websites Built', 'To Grow Your', 'Business.']
 
 function AnimatedHeadline() {
   return (
@@ -232,252 +96,321 @@ function AnimatedHeadline() {
       style={{
         fontFamily: "'Space Grotesk', sans-serif",
         fontWeight: 700,
-        fontSize: 'clamp(3.5rem, 8vw, 7rem)',
-        lineHeight: 0.92,
-        color: '#ffffff',
-        letterSpacing: '-0.02em',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        gap: '0 1rem',
+        fontSize: 'clamp(2.8rem, 5.5vw, 5rem)',
+        lineHeight: 1.05,
+        color: '#111111',
+        letterSpacing: '-0.03em',
+        margin: 0,
       }}
     >
-      {HEADLINE_WORDS.map((word, i) => (
+      {HEADLINE.map((line, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 + i * 0.09, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          style={{ display: 'inline-block' }}
+          transition={{ delay: 0.3 + i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{ display: 'block' }}
         >
-          {word}
+          {i === 2 ? (
+            <span style={{ color: '#FF5C00' }}>{line}</span>
+          ) : line}
         </motion.span>
       ))}
     </h1>
   )
 }
 
-// ─── Scroll Indicator ─────────────────────────────────────────────────────────
-function ScrollIndicator() {
-  return (
-    <motion.div
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.9, duration: 0.6 }}
-    >
-      <span
-        style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: '0.65rem',
-          textTransform: 'uppercase',
-          letterSpacing: '0.2em',
-          color: 'rgba(255,255,255,0.38)',
-        }}
-      >
-        Scroll
-      </span>
-      <motion.div
-        style={{ width: 1, height: 40, backgroundColor: '#FF5C00', originY: 0 }}
-        animate={{ scaleY: [0.3, 1, 0.3], opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#FF5C00' }}
-        animate={{ y: [0, 6, 0], opacity: [1, 0.4, 1] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-      />
-    </motion.div>
-  )
-}
-
 // ─── Main Hero ────────────────────────────────────────────────────────────────
 export default function Hero() {
-  const [webglSupported] = useState(() => isWebGLSupported())
-  const mouseRef = useRef<MouseState>({ x: 0, y: 0, targetX: 0, targetY: 0 })
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current.targetX = (e.clientX / window.innerWidth - 0.5) * 2
-      mouseRef.current.targetY = -(e.clientY / window.innerHeight - 0.5) * 2
-    }
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
-
   return (
     <section
-      style={{ minHeight: '100vh', backgroundColor: '#111111', position: 'relative', overflow: 'hidden' }}
+      style={{
+        minHeight: '100vh',
+        backgroundColor: '#F8F7F4',
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+      }}
     >
-      {/* 3D Canvas or CSS fallback */}
-      {webglSupported ? (
-        <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
-          <Canvas
-            camera={{ position: [0, 0, 5], fov: 60 }}
-            gl={{ antialias: true, alpha: true }}
-            dpr={[1, 2]}
-          >
-            <AdaptiveDpr pixelated />
-            <AdaptiveEvents />
-            <Suspense fallback={null}>
-              <Scene mouseRef={mouseRef} />
-            </Suspense>
-          </Canvas>
-        </div>
-      ) : (
-        <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
-          <FallbackBackground />
-        </div>
-      )}
-
-      {/* Radial vignette */}
+      {/* Subtle gradient background */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          zIndex: 15,
           pointerEvents: 'none',
-          background:
-            'radial-gradient(ellipse 70% 80% at 50% 50%, transparent 30%, rgba(17,17,17,0.65) 100%)',
-        }}
-      />
-
-      {/* Text overlay */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 20,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '0 1.5rem',
         }}
       >
-        <div style={{ maxWidth: '64rem', width: '100%', textAlign: 'center' }}>
-          {/* Eyebrow */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: '0.7rem',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.22em',
-              color: '#FF5C00',
-              marginBottom: '1.5rem',
-              display: 'inline-block',
-            }}
-          >
-            Premium Digital Agency
-          </motion.p>
+        <div style={{
+          position: 'absolute',
+          top: '-10%',
+          right: '-5%',
+          width: '55%',
+          height: '70%',
+          background: 'radial-gradient(ellipse, rgba(255,92,0,0.07) 0%, transparent 70%)',
+          borderRadius: '50%',
+        }} />
+        <div style={{
+          position: 'absolute',
+          bottom: '0',
+          left: '-10%',
+          width: '40%',
+          height: '50%',
+          background: 'radial-gradient(ellipse, rgba(255,122,92,0.05) 0%, transparent 70%)',
+          borderRadius: '50%',
+        }} />
+      </div>
 
-          {/* Headline */}
-          <div style={{ marginBottom: '1.5rem' }}>
-            <AnimatedHeadline />
+      <div
+        style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '120px 24px 80px',
+          width: '100%',
+          position: 'relative',
+          zIndex: 10,
+        }}
+      >
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '4rem',
+            alignItems: 'center',
+          }}
+        >
+          {/* Left: Text content */}
+          <div>
+            {/* Eyebrow */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                marginBottom: 28,
+              }}
+            >
+              <span style={{
+                display: 'inline-block',
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: '#FF5C00',
+              }} />
+              <span style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                color: '#FF5C00',
+              }}>
+                Premium Web Design Studio · Australia
+              </span>
+            </motion.div>
+
+            {/* Headline */}
+            <div style={{ marginBottom: 24 }}>
+              <AnimatedHeadline />
+            </div>
+
+            {/* Subtext */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.65, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: '1.1rem',
+                lineHeight: 1.7,
+                color: 'rgba(17,17,17,0.58)',
+                maxWidth: '400px',
+                marginBottom: 36,
+              }}
+            >
+              We design premium websites that generate leads, and manage social media that grows businesses. Built for Australian business owners who want results.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}
+            >
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.03, boxShadow: '0 12px 40px rgba(255,92,0,0.4)' }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '14px 28px',
+                  borderRadius: '9999px',
+                  fontSize: '0.95rem',
+                  fontWeight: 600,
+                  color: '#ffffff',
+                  backgroundColor: '#FF5C00',
+                  textDecoration: 'none',
+                  fontFamily: "'Inter', sans-serif",
+                  boxShadow: '0 8px 32px rgba(255,92,0,0.3)',
+                  transition: 'box-shadow 0.3s ease',
+                }}
+              >
+                Get Started
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </motion.a>
+
+              <motion.a
+                href="#portfolio"
+                whileHover={{ scale: 1.03, backgroundColor: 'rgba(17,17,17,0.06)' }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '14px 28px',
+                  borderRadius: '9999px',
+                  fontSize: '0.95rem',
+                  fontWeight: 600,
+                  color: '#111111',
+                  backgroundColor: 'rgba(17,17,17,0.04)',
+                  border: '1px solid rgba(17,17,17,0.1)',
+                  textDecoration: 'none',
+                  fontFamily: "'Inter', sans-serif",
+                  transition: 'background-color 0.2s ease',
+                }}
+              >
+                View Our Work
+              </motion.a>
+            </motion.div>
+
+            {/* Trust signal */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.1, duration: 0.6 }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                marginTop: 40,
+              }}
+            >
+              <div style={{ display: 'flex' }}>
+                {['#FF5C00', '#7C3AED', '#059669', '#0284C7'].map((c, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      background: c,
+                      border: '2px solid #F8F7F4',
+                      marginLeft: i === 0 ? 0 : -8,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: '#fff',
+                      fontFamily: 'Inter, sans-serif',
+                    }}
+                  >
+                    {['SK', 'MT', 'PM', 'JW'][i]}
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div style={{ display: 'flex', gap: 2, marginBottom: 2 }}>
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} width="12" height="12" viewBox="0 0 12 12" fill="#FF5C00">
+                      <path d="M6 1l1.3 2.6 2.9.4-2.1 2 .5 2.9L6 7.5 3.4 8.9l.5-2.9L2 4l2.9-.4z" />
+                    </svg>
+                  ))}
+                </div>
+                <span style={{ fontSize: '0.78rem', color: 'rgba(17,17,17,0.5)', fontFamily: 'Inter, sans-serif' }}>
+                  Trusted by 200+ Australian businesses
+                </span>
+              </div>
+            </motion.div>
           </div>
 
-          {/* Subtext */}
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 400,
-              fontSize: '1.125rem',
-              lineHeight: 1.65,
-              color: 'rgba(255,255,255,0.68)',
-              maxWidth: '38rem',
-              margin: '0 auto 2.5rem',
-            }}
-          >
-            Premium websites, social media, branding, AI automation, and ready-to-launch
-            businesses — all in one place.
-          </motion.p>
-
-          {/* CTA Buttons */}
+          {/* Right: Browser mockup */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1rem',
-            }}
+            initial={{ opacity: 0, x: 40, y: 20 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            style={{ position: 'relative' }}
           >
-            <motion.button
-              whileHover={{ scale: 1.03, backgroundColor: '#FF7A1A' }}
-              whileTap={{ scale: 0.97 }}
+            {/* Floating badge */}
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               style={{
-                padding: '1rem 2rem',
-                borderRadius: '9999px',
-                fontSize: '1rem',
-                fontWeight: 600,
-                color: '#ffffff',
-                backgroundColor: '#FF5C00',
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: "'Inter', sans-serif",
-                boxShadow: '0 8px 32px rgba(255,92,0,0.35)',
+                position: 'absolute',
+                top: -20,
+                right: -16,
+                zIndex: 20,
+                background: 'white',
+                borderRadius: 16,
+                padding: '12px 16px',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
               }}
             >
-              Launch My Business
-            </motion.button>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: '#FF5C00', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M9 2l1.6 3.3 3.6.5-2.6 2.5.6 3.6L9 10.2l-3.2 1.7.6-3.6L4 5.8l3.6-.5z" fill="white" />
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#111', fontFamily: 'Space Grotesk, sans-serif' }}>95+ Lighthouse</div>
+                <div style={{ fontSize: 11, color: 'rgba(17,17,17,0.45)', fontFamily: 'Inter, sans-serif' }}>Performance score</div>
+              </div>
+            </motion.div>
 
-            <motion.button
-              whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.12)' }}
-              whileTap={{ scale: 0.97 }}
+            {/* Second floating badge */}
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
               style={{
-                padding: '1rem 2rem',
-                borderRadius: '9999px',
-                fontSize: '1rem',
-                fontWeight: 600,
-                color: '#ffffff',
-                backgroundColor: 'rgba(255,255,255,0.07)',
-                border: '1px solid rgba(255,255,255,0.18)',
-                backdropFilter: 'blur(12px)',
-                cursor: 'pointer',
-                fontFamily: "'Inter', sans-serif",
+                position: 'absolute',
+                bottom: 20,
+                left: -20,
+                zIndex: 20,
+                background: 'white',
+                borderRadius: 14,
+                padding: '10px 14px',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
               }}
             >
-              Browse Ready-Made Businesses
-            </motion.button>
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8.5l3.5 3.5 6.5-7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#111', fontFamily: 'Space Grotesk, sans-serif' }}>Launched in 3 weeks</div>
+                <div style={{ fontSize: 10, color: 'rgba(17,17,17,0.4)', fontFamily: 'Inter, sans-serif' }}>On time, every time</div>
+              </div>
+            </motion.div>
+
+            <BrowserMockup />
           </motion.div>
         </div>
       </div>
-
-      {/* Bottom gradient fade */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '8rem',
-          zIndex: 25,
-          pointerEvents: 'none',
-          background: 'linear-gradient(to bottom, transparent, #111111)',
-        }}
-      />
-
-      {/* Scroll indicator */}
-      <div style={{ position: 'relative', zIndex: 30 }}>
-        <ScrollIndicator />
-      </div>
-
-      {/* Keyframe for CSS fallback animation */}
-      <style>{`
-        @keyframes heroFloat {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-22px) scale(1.05); }
-        }
-      `}</style>
     </section>
   )
 }

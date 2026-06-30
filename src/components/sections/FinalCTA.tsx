@@ -1,170 +1,170 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
 
 export default function FinalCTA() {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
   return (
     <section
       id="cta"
-      style={{ backgroundColor: '#111111' }}
-      className="relative min-h-screen flex items-center justify-center px-6 py-32 overflow-hidden"
+      style={{
+        backgroundColor: '#111111',
+        padding: '140px 24px',
+        position: 'relative' as const,
+        overflow: 'hidden',
+      }}
     >
-      {/* Animated gradient orbs */}
-      <div aria-hidden className="absolute inset-0 pointer-events-none">
-        <div
-          className="orb-1 absolute rounded-full"
-          style={{
-            width: '800px',
-            height: '800px',
-            background: 'radial-gradient(circle, rgba(255,92,0,0.18) 0%, transparent 70%)',
-            top: '-200px',
-            left: '-200px',
-            filter: 'blur(60px)',
-            animation: 'orbFloat1 12s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="orb-2 absolute rounded-full"
-          style={{
-            width: '600px',
-            height: '600px',
-            background: 'radial-gradient(circle, rgba(255,122,92,0.14) 0%, transparent 70%)',
-            bottom: '-100px',
-            right: '-100px',
-            filter: 'blur(80px)',
-            animation: 'orbFloat2 16s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="orb-3 absolute rounded-full"
-          style={{
-            width: '400px',
-            height: '400px',
-            background: 'radial-gradient(circle, rgba(255,92,0,0.10) 0%, transparent 70%)',
-            top: '50%',
-            left: '60%',
-            filter: 'blur(60px)',
-            animation: 'orbFloat3 20s ease-in-out infinite',
-          }}
-        />
+      {/* Background glow */}
+      <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '60%',
+          height: '60%',
+          background: 'radial-gradient(ellipse, rgba(255,92,0,0.12) 0%, transparent 70%)',
+        }} />
       </div>
 
-      <style>{`
-        @keyframes orbFloat1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(60px, 40px) scale(1.05); }
-          66% { transform: translate(-30px, 80px) scale(0.95); }
-        }
-        @keyframes orbFloat2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          40% { transform: translate(-80px, -50px) scale(1.08); }
-          70% { transform: translate(40px, -30px) scale(0.92); }
-        }
-        @keyframes orbFloat3 {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); }
-          50% { transform: translate(-50%, -50%) scale(1.15); }
-        }
-      `}</style>
-
-      {/* Content */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 30 }}
-        whileInView={{ opacity: 1, scale: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="relative z-10 text-center max-w-5xl mx-auto"
-      >
-        {/* Label */}
+      <div ref={ref} style={{ maxWidth: 760, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 10 }}>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-xs uppercase tracking-[0.4em] mb-6 font-semibold"
-          style={{ color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          style={{
+            fontSize: '0.7rem',
+            fontWeight: 600,
+            textTransform: 'uppercase' as const,
+            letterSpacing: '0.2em',
+            color: '#FF5C00',
+            fontFamily: 'Inter, sans-serif',
+            marginBottom: 24,
+          }}
         >
-          Get Started Today
+          Ready to grow?
         </motion.p>
 
-        {/* Headline */}
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="font-bold leading-[1.05] mb-8"
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           style={{
             fontFamily: 'Space Grotesk, sans-serif',
-            fontSize: 'clamp(3rem, 8vw, 8rem)',
-            background: 'linear-gradient(180deg, #ffffff 0%, #d4d0c8 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+            fontWeight: 700,
+            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+            lineHeight: 1.05,
+            letterSpacing: '-0.035em',
+            color: '#ffffff',
+            margin: '0 0 20px',
           }}
         >
-          Ready to Launch Something Incredible?
+          Ready to grow your business?
         </motion.h2>
 
-        {/* Subtext */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="text-lg md:text-xl mb-12 mx-auto"
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.25, duration: 0.6 }}
           style={{
-            color: 'rgba(255,255,255,0.55)',
             fontFamily: 'Inter, sans-serif',
-            maxWidth: '520px',
-            lineHeight: 1.6,
+            fontSize: '1.1rem',
+            lineHeight: 1.7,
+            color: 'rgba(255,255,255,0.5)',
+            maxWidth: 480,
+            margin: '0 auto 40px',
           }}
         >
-          Join 340+ businesses that trusted Launchables to build their digital presence.
+          Let's build something great. Book a free discovery call and we'll show you exactly how we can help your business grow.
         </motion.p>
 
-        {/* Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.45 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center' }}
         >
-          <a
+          <motion.a
             href="#contact"
-            className="inline-flex items-center justify-center px-10 py-5 rounded-full font-semibold text-white text-base transition-all duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98]"
+            whileHover={{ scale: 1.04, boxShadow: '0 16px 48px rgba(255,92,0,0.45)' }}
+            whileTap={{ scale: 0.97 }}
             style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 10,
+              padding: '16px 36px',
+              borderRadius: '9999px',
+              fontSize: '1rem',
+              fontWeight: 700,
+              color: '#ffffff',
               backgroundColor: '#FF5C00',
+              textDecoration: 'none',
               fontFamily: 'Inter, sans-serif',
-              boxShadow: '0 0 40px rgba(255,92,0,0.35)',
+              boxShadow: '0 8px 32px rgba(255,92,0,0.35)',
+              transition: 'box-shadow 0.3s ease',
             }}
           >
-            Start My Project
-          </a>
-          <a
-            href="#marketplace"
-            className="inline-flex items-center justify-center px-10 py-5 rounded-full font-semibold text-white text-base transition-all duration-200 hover:bg-white hover:text-black active:scale-[0.98]"
+            Book A Discovery Call
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </motion.a>
+
+          <motion.a
+            href="#portfolio"
+            whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.08)' }}
+            whileTap={{ scale: 0.97 }}
             style={{
-              border: '1px solid rgba(255,255,255,0.3)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '16px 36px',
+              borderRadius: '9999px',
+              fontSize: '1rem',
+              fontWeight: 600,
+              color: '#ffffff',
+              backgroundColor: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              textDecoration: 'none',
               fontFamily: 'Inter, sans-serif',
+              transition: 'background-color 0.2s ease',
             }}
           >
-            Browse Businesses
-          </a>
+            View Our Work
+          </motion.a>
         </motion.div>
 
-        {/* Guarantee line */}
-        <motion.p
+        {/* Trust row */}
+        <motion.div
           initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-sm"
-          style={{ color: 'rgba(255,255,255,0.3)', fontFamily: 'Inter, sans-serif' }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 32,
+            justifyContent: 'center',
+            marginTop: 56,
+          }}
         >
-          No lock-in contracts. Cancel anytime. Results guaranteed.
-        </motion.p>
-      </motion.div>
+          {[
+            { val: '200+', label: 'Australian businesses' },
+            { val: '3 wks', label: 'Average delivery' },
+            { val: '5★', label: 'Average rating' },
+          ].map((s) => (
+            <div key={s.val} style={{ textAlign: 'center' }}>
+              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: '1.6rem', color: '#ffffff', marginBottom: 4 }}>
+                {s.val}
+              </div>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: 'rgba(255,255,255,0.35)' }}>
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </section>
-  );
+  )
 }
