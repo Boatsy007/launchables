@@ -1,100 +1,243 @@
-import { motion } from 'framer-motion'
-import { Trophy, Users, MapPin, Camera, Star } from 'lucide-react'
-import SectionLabel from '../ui/SectionLabel'
+'use client';
 
-const benefits = [
-  {
-    icon: Trophy,
-    title: 'A national title to play for.',
-    desc: 'For A Grade players who have won their local premiership, CNCA is the next step — a national championship that measures your club against the best country clubs in Australia.',
-    color: 'bg-pink-500',
-  },
-  {
-    icon: Users,
-    title: 'A reason to bring the whole club together.',
-    desc: 'Winning a premiership is the perfect excuse for an end-of-season trip. CNCA gives your whole club — players, families, committee and supporters — a shared goal to travel toward.',
-    color: 'bg-navy-700',
-  },
-  {
-    icon: MapPin,
-    title: 'A Gold Coast end-of-season trip.',
-    desc: 'Four days on the Gold Coast is a reward in itself. Beaches, dining and attractions for every member of the travelling group — long after the final whistle.',
-    color: 'bg-pink-500',
-  },
-  {
-    icon: Camera,
-    title: 'A professional event experience.',
-    desc: 'Professional photography, a welcome function, a formal presentation ceremony and live coverage of key matches. This is a national event — run and presented at that standard.',
-    color: 'bg-navy-700',
-  },
-  {
-    icon: Star,
-    title: 'A story your local league will remember.',
-    desc: 'Representing your district at a national championship creates a story that lives in your club for years. It\'s a moment that defines a season — and a club.',
-    color: 'bg-pink-500',
-  },
-]
+import { motion } from 'framer-motion';
 
-const stateList = [
-  'NSW', 'QLD', 'VIC', 'WA', 'SA', 'TAS', 'NT', 'ACT',
-  'NSW', 'QLD', 'VIC', 'WA', 'SA', 'TAS', 'NT', 'ACT',
-]
+interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+  category: string;
+  initials: string;
+  avatarColor: string;
+}
+
+const testimonials: Testimonial[] = [
+  {
+    quote:
+      "Launchables built our website in 2 weeks and it immediately ranked on page one. We've seen a 340% increase in organic traffic.",
+    name: 'Sarah K.',
+    role: 'Director',
+    company: 'Apex Plumbing',
+    category: 'Trades',
+    initials: 'SK',
+    avatarColor: '#FF5C00',
+  },
+  {
+    quote:
+      "The best investment we've made. Our social media went from 200 to 15,000 followers in 90 days.",
+    name: 'Marcus T.',
+    role: 'Owner',
+    company: 'Nova Coffee',
+    category: 'Hospitality',
+    initials: 'MT',
+    avatarColor: '#7C3AED',
+  },
+  {
+    quote:
+      'We bought a ready-to-launch business from their marketplace and were trading within a month. Incredible.',
+    name: 'Priya M.',
+    role: 'Founder',
+    company: 'CleanPro',
+    category: 'Services',
+    initials: 'PM',
+    avatarColor: '#059669',
+  },
+  {
+    quote:
+      'The AI automation they set up saves us 20 hours a week. It paid for itself in the first month.',
+    name: 'James W.',
+    role: 'CEO',
+    company: 'Summit Events',
+    category: 'Events',
+    initials: 'JW',
+    avatarColor: '#0284C7',
+  },
+  {
+    quote:
+      'Honest, fast, and genuinely talented. Our rebrand drove a 3x increase in enquiries.',
+    name: 'Emily R.',
+    role: 'Owner',
+    company: 'The Styling Room',
+    category: 'Beauty',
+    initials: 'ER',
+    avatarColor: '#DB2777',
+  },
+  {
+    quote:
+      "Their SEO work put us at #1 for our main keyword in 8 weeks. We've never had so many leads.",
+    name: 'Tom B.',
+    role: 'Director',
+    company: 'Greenpath',
+    category: 'Landscaping',
+    initials: 'TB',
+    avatarColor: '#16A34A',
+  },
+  {
+    quote:
+      'We launched our SaaS product through their marketplace and got 200 signups before we even had a full product.',
+    name: 'Alex C.',
+    role: 'Founder',
+    company: 'Clearform AI',
+    category: 'Tech / SaaS',
+    initials: 'AC',
+    avatarColor: '#EA580C',
+  },
+  {
+    quote:
+      'The team feels like an extension of our business. Professional, responsive, and obsessed with results.',
+    name: 'Natasha V.',
+    role: 'CMO',
+    company: 'Velocity Gym',
+    category: 'Fitness',
+    initials: 'NV',
+    avatarColor: '#9333EA',
+  },
+];
+
+function StarRating() {
+  return (
+    <div className="flex gap-0.5 mb-4">
+      {[...Array(5)].map((_, i) => (
+        <svg key={i} width="16" height="16" viewBox="0 0 16 16" fill="#FF5C00">
+          <path d="M8 1l1.854 4.326L14.5 5.9l-3.25 3.167.767 4.433L8 11.25l-4.017 2.25.767-4.433L1.5 5.9l4.646-.574L8 1z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+function TestimonialCard({ t, index }: { t: Testimonial; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.55, delay: index * 0.08 }}
+      className="break-inside-avoid mb-6"
+    >
+      <div
+        className="bg-white rounded-2xl p-7"
+        style={{
+          borderLeft: '4px solid #FF5C00',
+          boxShadow: '0 2px 20px rgba(0,0,0,0.06)',
+        }}
+      >
+        <StarRating />
+        <blockquote
+          className="text-base italic leading-relaxed mb-6"
+          style={{ color: '#222', fontFamily: 'Inter, sans-serif' }}
+        >
+          &ldquo;{t.quote}&rdquo;
+        </blockquote>
+        <div className="flex items-center gap-3">
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+            style={{ backgroundColor: t.avatarColor, fontFamily: 'Space Grotesk, sans-serif' }}
+          >
+            {t.initials}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p
+              className="font-semibold text-sm leading-tight"
+              style={{ color: '#111', fontFamily: 'Inter, sans-serif' }}
+            >
+              {t.name}
+            </p>
+            <p
+              className="text-xs leading-tight"
+              style={{ color: 'rgba(17,17,17,0.45)', fontFamily: 'Inter, sans-serif' }}
+            >
+              {t.role}, {t.company}
+            </p>
+          </div>
+          <span
+            className="text-xs px-2.5 py-1 rounded-full flex-shrink-0"
+            style={{
+              backgroundColor: 'rgba(255,92,0,0.08)',
+              color: '#FF5C00',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 500,
+            }}
+          >
+            {t.category}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Testimonials() {
   return (
-    <section id="why-cnca" className="bg-white overflow-hidden">
-      {/* State ticker */}
-      <div className="bg-navy-700 py-3 overflow-hidden">
+    <section
+      id="testimonials"
+      style={{ backgroundColor: '#F8F7F4' }}
+      className="py-32 px-6 overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto">
         <motion.div
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-          className="flex gap-8 whitespace-nowrap"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          {[...stateList, ...stateList].map((s, i) => (
-            <span key={i} className="text-xs font-bold text-white/60 tracking-widest uppercase flex items-center gap-3">
-              <span className="text-pink-500">◆</span>
-              {s} Country Clubs
-            </span>
-          ))}
+          <p
+            className="text-xs uppercase tracking-[0.3em] mb-4 font-semibold"
+            style={{ color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}
+          >
+            Client Stories
+          </p>
+          <h2
+            className="text-5xl md:text-6xl font-bold"
+            style={{ fontFamily: 'Space Grotesk, sans-serif', color: '#111111' }}
+          >
+            What Our Clients Say.
+          </h2>
         </motion.div>
-      </div>
 
-      <div className="section-container">
+        <style>{`
+          .masonry-testimonials { column-count: 1; column-gap: 1.5rem; }
+          @media (min-width: 640px) { .masonry-testimonials { column-count: 2; } }
+          @media (min-width: 1024px) { .masonry-testimonials { column-count: 3; } }
+        `}</style>
+        <div className="masonry-testimonials">
+          {testimonials.map((t, i) => (
+            <TestimonialCard key={t.name} t={t} index={i} />
+          ))}
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center mt-16"
         >
-          <SectionLabel>Why It Matters</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-navy-700 tracking-tight leading-tight mb-4">
-            Why Clubs Will Want To Be There
-          </h2>
-          <p className="text-lg text-navy-400 max-w-xl mx-auto">
-            For A Grade premiership clubs who want to take the next step — and for every club member who deserves to celebrate the season in style.
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} width="20" height="20" viewBox="0 0 16 16" fill="#FF5C00">
+                  <path d="M8 1l1.854 4.326L14.5 5.9l-3.25 3.167.767 4.433L8 11.25l-4.017 2.25.767-4.433L1.5 5.9l4.646-.574L8 1z" />
+                </svg>
+              ))}
+            </div>
+            <span
+              className="font-bold text-lg"
+              style={{ fontFamily: 'Space Grotesk, sans-serif', color: '#111' }}
+            >
+              4.9/5
+            </span>
+          </div>
+          <p
+            className="text-sm"
+            style={{ color: 'rgba(17,17,17,0.5)', fontFamily: 'Inter, sans-serif' }}
+          >
+            Based on 340+ client reviews across Australia
           </p>
         </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {benefits.map(({ icon: Icon, title, desc, color }, i) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.55, delay: i * 0.08 }}
-              className={`bg-gray-50 rounded-2xl p-7 border border-navy-50 card-hover ${i === 4 ? 'md:col-span-2 lg:col-span-1' : ''}`}
-            >
-              <div className={`w-11 h-11 ${color} rounded-xl flex items-center justify-center mb-5`}>
-                <Icon size={20} className="text-white" />
-              </div>
-              <h3 className="text-base font-extrabold text-navy-700 mb-3 leading-snug">{title}</h3>
-              <p className="text-sm text-navy-400 leading-relaxed">{desc}</p>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
-  )
+  );
 }

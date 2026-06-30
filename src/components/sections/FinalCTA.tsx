@@ -1,118 +1,170 @@
-import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
-import MagneticButton from '../ui/MagneticButton'
+'use client';
 
-const words = ['PLAY.', 'TRAVEL.', 'CELEBRATE.', 'BELONG.']
-
-const wordVariants = {
-  hidden: { clipPath: 'inset(0 0 100% 0)', y: 60, opacity: 0 },
-  show: (i: number) => ({
-    clipPath: 'inset(0 0 0% 0)',
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.9, delay: i * 0.14, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
-  }),
-}
+import { motion } from 'framer-motion';
 
 export default function FinalCTA() {
-  const scrollToRegister = () =>
-    document.querySelector('#register')?.scrollIntoView({ behavior: 'smooth' })
-
   return (
-    <section className="bg-animated-pink relative overflow-hidden noise min-h-[92vh] flex items-center">
-
-      {/* Large decorative circles */}
-      <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full border border-white/5 pointer-events-none" />
-      <div className="absolute bottom-[-30%] left-[-10%] w-[50vw] h-[50vw] rounded-full border border-white/5 pointer-events-none" />
-      <div className="absolute top-1/4 right-1/4 w-[25vw] h-[25vw] rounded-full border border-white/5 pointer-events-none" />
-
-      {/* Netball SVG decoration */}
-      <svg
-        className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none"
-        viewBox="0 0 800 800"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="400" cy="400" r="380" stroke="white" strokeWidth="2" />
-        <circle cx="400" cy="400" r="240" stroke="white" strokeWidth="2" />
-        <line x1="400" y1="20" x2="400" y2="780" stroke="white" strokeWidth="2" />
-        <path d="M 60 400 Q 400 100 740 400" stroke="white" strokeWidth="2" fill="none" />
-        <path d="M 60 400 Q 400 700 740 400" stroke="white" strokeWidth="2" fill="none" />
-      </svg>
-
-      {/* Gold star accents */}
-      <div className="absolute top-16 right-16 text-gold opacity-60 pointer-events-none">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
-        </svg>
+    <section
+      id="cta"
+      style={{ backgroundColor: '#111111' }}
+      className="relative min-h-screen flex items-center justify-center px-6 py-32 overflow-hidden"
+    >
+      {/* Animated gradient orbs */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none">
+        <div
+          className="orb-1 absolute rounded-full"
+          style={{
+            width: '800px',
+            height: '800px',
+            background: 'radial-gradient(circle, rgba(255,92,0,0.18) 0%, transparent 70%)',
+            top: '-200px',
+            left: '-200px',
+            filter: 'blur(60px)',
+            animation: 'orbFloat1 12s ease-in-out infinite',
+          }}
+        />
+        <div
+          className="orb-2 absolute rounded-full"
+          style={{
+            width: '600px',
+            height: '600px',
+            background: 'radial-gradient(circle, rgba(255,122,92,0.14) 0%, transparent 70%)',
+            bottom: '-100px',
+            right: '-100px',
+            filter: 'blur(80px)',
+            animation: 'orbFloat2 16s ease-in-out infinite',
+          }}
+        />
+        <div
+          className="orb-3 absolute rounded-full"
+          style={{
+            width: '400px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(255,92,0,0.10) 0%, transparent 70%)',
+            top: '50%',
+            left: '60%',
+            filter: 'blur(60px)',
+            animation: 'orbFloat3 20s ease-in-out infinite',
+          }}
+        />
       </div>
-      <div className="absolute bottom-24 left-20 text-gold opacity-40 pointer-events-none">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
-        </svg>
-      </div>
+
+      <style>{`
+        @keyframes orbFloat1 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(60px, 40px) scale(1.05); }
+          66% { transform: translate(-30px, 80px) scale(0.95); }
+        }
+        @keyframes orbFloat2 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          40% { transform: translate(-80px, -50px) scale(1.08); }
+          70% { transform: translate(40px, -30px) scale(0.92); }
+        }
+        @keyframes orbFloat3 {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); }
+          50% { transform: translate(-50%, -50%) scale(1.15); }
+        }
+      `}</style>
 
       {/* Content */}
-      <div className="relative z-10 w-full">
-        <div className="section-pad text-center">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 30 }}
+        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="relative z-10 text-center max-w-5xl mx-auto"
+      >
+        {/* Label */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="text-xs uppercase tracking-[0.4em] mb-6 font-semibold"
+          style={{ color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}
+        >
+          Get Started Today
+        </motion.p>
 
-          {/* Stacked words */}
-          <div className="mb-12">
-            {words.map((word, i) => (
-              <div key={word} className="overflow-hidden">
-                <motion.div
-                  custom={i}
-                  variants={wordVariants}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: '-60px' }}
-                  className="font-display text-[clamp(4rem,13vw,11rem)] text-white leading-[0.9] tracking-wide"
-                >
-                  {word}
-                </motion.div>
-              </div>
-            ))}
-          </div>
+        {/* Headline */}
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="font-bold leading-[1.05] mb-8"
+          style={{
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontSize: 'clamp(3rem, 8vw, 8rem)',
+            background: 'linear-gradient(180deg, #ffffff 0%, #d4d0c8 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}
+        >
+          Ready to Launch Something Incredible?
+        </motion.h2>
 
-          {/* Body */}
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-            className="text-white/80 text-base md:text-xl font-medium max-w-xl mx-auto mb-10 leading-relaxed"
+        {/* Subtext */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="text-lg md:text-xl mb-12 mx-auto"
+          style={{
+            color: 'rgba(255,255,255,0.55)',
+            fontFamily: 'Inter, sans-serif',
+            maxWidth: '520px',
+            lineHeight: 1.6,
+          }}
+        >
+          Join 340+ businesses that trusted Launchables to build their digital presence.
+        </motion.p>
+
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
+        >
+          <a
+            href="#contact"
+            className="inline-flex items-center justify-center px-10 py-5 rounded-full font-semibold text-white text-base transition-all duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              backgroundColor: '#FF5C00',
+              fontFamily: 'Inter, sans-serif',
+              boxShadow: '0 0 40px rgba(255,92,0,0.35)',
+            }}
           >
-            A Grade premiership clubs are invited to compete for the CNCA title on the Gold Coast — October 2027.
-          </motion.p>
-
-          {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-            className="flex flex-col items-center gap-5"
+            Start My Project
+          </a>
+          <a
+            href="#marketplace"
+            className="inline-flex items-center justify-center px-10 py-5 rounded-full font-semibold text-white text-base transition-all duration-200 hover:bg-white hover:text-black active:scale-[0.98]"
+            style={{
+              border: '1px solid rgba(255,255,255,0.3)',
+              fontFamily: 'Inter, sans-serif',
+            }}
           >
-            <motion.div
-              animate={{ boxShadow: ['0 0 0 0 rgba(255,255,255,0.3)', '0 0 0 20px rgba(255,255,255,0)', '0 0 0 0 rgba(255,255,255,0)'] }}
-              transition={{ duration: 2.5, repeat: Infinity, delay: 1 }}
-              className="rounded-full"
-            >
-              <MagneticButton
-                onClick={scrollToRegister}
-                className="inline-flex items-center gap-3 bg-white text-navy font-bold text-sm px-10 py-4 rounded-full hover:bg-white/90 transition-colors duration-300"
-              >
-                Request Club Invitation
-                <ArrowRight size={16} />
-              </MagneticButton>
-            </motion.div>
+            Browse Businesses
+          </a>
+        </motion.div>
 
-            <p className="text-white/50 text-xs font-semibold tracking-widest uppercase">
-              Invitation only · A Grade premiership clubs · Limited places
-            </p>
-          </motion.div>
-        </div>
-      </div>
+        {/* Guarantee line */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="text-sm"
+          style={{ color: 'rgba(255,255,255,0.3)', fontFamily: 'Inter, sans-serif' }}
+        >
+          No lock-in contracts. Cancel anytime. Results guaranteed.
+        </motion.p>
+      </motion.div>
     </section>
-  )
+  );
 }
