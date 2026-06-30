@@ -386,7 +386,7 @@ export default function FeaturedBusinesses() {
           <motion.div
             ref={trackRef}
             drag="x"
-            style={{ x }}
+            style={{ x, width: 'max-content' }}
             dragConstraints={{
               left: -(CARD_WIDTH + CARD_GAP) * (TOTAL_CARDS - 1),
               right: 0,
@@ -394,7 +394,6 @@ export default function FeaturedBusinesses() {
             dragElastic={0.1}
             dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
             className="flex gap-6 cursor-grab active:cursor-grabbing"
-            style={{ width: "max-content" }}
           >
             {businesses.map((business, i) => (
               <motion.div

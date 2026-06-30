@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll } from 'framer-motion'
 import MagneticButton from '../ui/MagneticButton'
 
@@ -106,15 +106,12 @@ export default function Nav() {
           {/* Right side */}
           <div className="flex items-center gap-4">
             <MagneticButton
-              className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white"
-              style={
-                {
-                  backgroundColor: '#FF5C00',
-                  fontFamily: "'Inter', sans-serif",
-                } as React.CSSProperties
-              }
+              className="hidden md:block"
+              style={{ backgroundColor: '#FF5C00', borderRadius: '9999px' }}
             >
-              Get Started
+              <span className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-full">
+                Get Started
+              </span>
             </MagneticButton>
 
             {/* Hamburger */}

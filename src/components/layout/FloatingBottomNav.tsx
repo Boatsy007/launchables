@@ -51,19 +51,17 @@ function MagneticCTA() {
   return (
     <motion.button
       ref={ref}
-      style={{ x: springX, y: springY }}
+      style={{
+        x: springX,
+        y: springY,
+        background: 'linear-gradient(135deg, #FF5C00 0%, #FF7A5C 100%)',
+      }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={scrollToContact}
       whileHover={{ scale: 1.06 }}
       whileTap={{ scale: 0.97 }}
       className="relative flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold text-white overflow-hidden select-none"
-      style={{
-        background: 'linear-gradient(135deg, #FF5C00 0%, #FF7A5C 100%)',
-        boxShadow: '0 0 0 0 rgba(255,92,0,0)',
-        x: springX,
-        y: springY,
-      }}
     >
       {/* glow ring on hover */}
       <motion.span

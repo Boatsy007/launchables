@@ -218,42 +218,46 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
   );
 }
 
-const wordFadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] as number[] },
-  }),
-};
+import type { Variants } from 'framer-motion'
 
-const panelFadeUp = {
+const wordFadeUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
+}
+
+const wordContainer: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+}
+
+const panelItem: Variants = {
   hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.06, duration: 0.6, ease: [0.22, 1, 0.36, 1] as number[] },
-  }),
-};
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+}
+
+const panelContainer: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06 } },
+}
+
+// keep alias for backwards compat within this file
+const panelFadeUp = panelItem
 
 function WordSplit({ text, className }: { text: string; className?: string }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
   const words = text.split(" ");
   return (
-    <span ref={ref} className={`inline-flex flex-wrap gap-x-[0.3em] ${className || ""}`}>
+    <motion.span
+      ref={ref}
+      className={`inline-flex flex-wrap gap-x-[0.3em] ${className || ""}`}
+      variants={wordContainer}
+    >
       {words.map((word, i) => (
-        <motion.span
-          key={i}
-          custom={i}
-          variants={wordFadeUp}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-        >
+        <motion.span key={i} variants={wordFadeUp}>
           {word}
         </motion.span>
       ))}
-    </span>
+    </motion.span>
   );
 }
 
@@ -319,15 +323,19 @@ export default function Services() {
         </div>
 
         {/* Services Grid */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-6 gap-4 auto-rows-auto">
+        <motion.div
+          ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-6 gap-4 auto-rows-auto"
+          variants={panelContainer}
+          animate={inView ? 'visible' : 'hidden'}
+        >
           {/* 2 large panels */}
-          {large.map((service, i) => (
+          {large.map((service) => (
             <motion.div
               key={service.id}
-              custom={i}
+              
+              /* stagger via container */
               variants={panelFadeUp}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
               className="md:col-span-3"
             >
               <TiltCard className="rounded-3xl">
@@ -378,13 +386,11 @@ export default function Services() {
           ))}
 
           {/* 3 medium panels */}
-          {medium.map((service, i) => (
+          {medium.map((service) => (
             <motion.div
               key={service.id}
-              custom={i + 2}
+              
               variants={panelFadeUp}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
               className="md:col-span-2"
             >
               <TiltCard className="rounded-3xl">
@@ -417,13 +423,11 @@ export default function Services() {
           ))}
 
           {/* 4 small panels — 3 cols each on md */}
-          {small.slice(0, 4).map((service, i) => (
+          {small.slice(0, 4).map((service) => (
             <motion.div
               key={service.id}
-              custom={i + 5}
+              
               variants={panelFadeUp}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
               className="md:col-span-3"
             >
               <TiltCard className="rounded-2xl">
@@ -456,13 +460,11 @@ export default function Services() {
           ))}
 
           {/* 3 small panels — 2 cols each on md */}
-          {small.slice(4).map((service, i) => (
+          {small.slice(4).map((service) => (
             <motion.div
               key={service.id}
-              custom={i + 9}
+              
               variants={panelFadeUp}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
               className="md:col-span-2"
             >
               <TiltCard className="rounded-2xl">
@@ -493,7 +495,7 @@ export default function Services() {
               </TiltCard>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

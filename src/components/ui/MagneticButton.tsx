@@ -1,16 +1,21 @@
-import { useRef, type ReactNode } from 'react'
+import { useRef, type ReactNode, type CSSProperties } from 'react'
 import { motion, useSpring } from 'framer-motion'
 
 interface MagneticButtonProps {
   children: ReactNode
   className?: string
   strength?: number
+  style?: CSSProperties
+  onClick?: () => void
+  href?: string
 }
 
 export default function MagneticButton({
   children,
   className = '',
   strength = 0.4,
+  style,
+  onClick,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -35,9 +40,10 @@ export default function MagneticButton({
   return (
     <motion.div
       ref={ref}
-      style={{ x, y, display: 'inline-block', cursor: 'pointer' }}
+      style={{ x, y, display: 'inline-block', cursor: 'pointer', ...style }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onClick={onClick}
       className={`magnetic-btn ${className}`}
     >
       {children}
