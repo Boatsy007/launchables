@@ -1,0 +1,52 @@
+import { lazy, Suspense } from 'react'
+import Nav from './components/layout/Nav'
+import Ticker from './components/layout/Ticker'
+import Footer from './components/layout/Footer'
+import Hero from './components/sections/Hero'
+import Stats from './components/sections/Stats'
+import FloatingBottomNav from './components/layout/FloatingBottomNav'
+import { ErrorBoundary } from './components/ui/ErrorBoundary'
+
+const Statement           = lazy(() => import('./components/sections/Statement'))
+const TheWeekend          = lazy(() => import('./components/sections/TheWeekend'))
+const WhyTravel           = lazy(() => import('./components/sections/WhyTravel'))
+const OneNationalChampion = lazy(() => import('./components/sections/OneNationalChampion'))
+const NotCompeting        = lazy(() => import('./components/sections/NotCompeting'))
+const Invitation          = lazy(() => import('./components/sections/Invitation'))
+
+const Blank = ({ h = 400 }: { h?: number }) => (
+  <div style={{ minHeight: `${h}px` }} />
+)
+
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <Nav />
+      <FloatingBottomNav />
+      <main>
+        <Ticker />
+        <Hero />
+        <Stats />
+        <Suspense fallback={<Blank h={300} />}>
+          <Statement />
+        </Suspense>
+        <Suspense fallback={<Blank h={600} />}>
+          <TheWeekend />
+        </Suspense>
+        <Suspense fallback={<Blank h={500} />}>
+          <WhyTravel />
+        </Suspense>
+        <Suspense fallback={<Blank h={500} />}>
+          <OneNationalChampion />
+        </Suspense>
+        <Suspense fallback={<Blank h={700} />}>
+          <NotCompeting />
+        </Suspense>
+        <Suspense fallback={<Blank h={600} />}>
+          <Invitation />
+        </Suspense>
+      </main>
+      <Footer />
+    </ErrorBoundary>
+  )
+}
