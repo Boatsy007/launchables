@@ -3,234 +3,190 @@
 import { useState, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 
-const FILTERS = ['All', 'Websites', 'Trades', 'Hospitality', 'Services', 'Health']
+const FILTERS = ['All', 'Trades', 'Hospitality', 'Services', 'Health']
 
 const projects = [
   {
     name: 'Apex Plumbing',
     category: 'Trades',
-    tagline: 'Local plumber, national quality.',
     result: '+340% organic traffic',
-    gradientFrom: '#1e3a5f',
-    gradientTo: '#0a1628',
-    accent: '#3B82F6',
-    url: 'apexplumbing.com.au',
+    bg: 'linear-gradient(140deg, #0a1628 0%, #071020 100%)',
+    accent: '#2563EB',
+    textAccent: '#60A5FA',
+    headline: 'Your local plumber.',
   },
   {
     name: 'Nova Coffee',
     category: 'Hospitality',
-    tagline: 'Where every cup tells a story.',
     result: '15K followers in 90 days',
-    gradientFrom: '#2c1810',
-    gradientTo: '#0f0804',
+    bg: 'linear-gradient(140deg, #1a0c04 0%, #0d0603 100%)',
     accent: '#D97706',
-    url: 'novacoffee.com.au',
+    textAccent: '#FCD34D',
+    headline: 'Every cup, a story.',
   },
   {
     name: 'The Styling Room',
     category: 'Services',
-    tagline: 'Beauty on your terms.',
     result: '3× more enquiries',
-    gradientFrom: '#3d1a2e',
-    gradientTo: '#150a12',
-    accent: '#EC4899',
-    url: 'thestylingroom.com.au',
+    bg: 'linear-gradient(140deg, #1a0a14 0%, #0d0509 100%)',
+    accent: '#DB2777',
+    textAccent: '#F472B6',
+    headline: 'Beauty on your terms.',
   },
   {
-    name: 'Greenpath Landscaping',
+    name: 'Greenpath',
     category: 'Services',
-    tagline: 'Gardens that last a lifetime.',
-    result: '#1 Google ranking in 8 weeks',
-    gradientFrom: '#0f2d1a',
-    gradientTo: '#061109',
-    accent: '#22C55E',
-    url: 'greenpath.com.au',
+    result: '#1 Google ranking, 8 weeks',
+    bg: 'linear-gradient(140deg, #061a0c 0%, #030d06 100%)',
+    accent: '#16A34A',
+    textAccent: '#4ADE80',
+    headline: 'Gardens that last.',
   },
   {
     name: 'CleanPro Services',
     category: 'Services',
-    tagline: 'Spotless. Every time.',
     result: 'Launched in 3 weeks',
-    gradientFrom: '#1a2d3d',
-    gradientTo: '#091118',
-    accent: '#0EA5E9',
-    url: 'cleanproservices.com.au',
+    bg: 'linear-gradient(140deg, #041a24 0%, #020e14 100%)',
+    accent: '#0284C7',
+    textAccent: '#38BDF8',
+    headline: 'Spotless. Every time.',
   },
   {
     name: 'Summit Health',
     category: 'Health',
-    tagline: 'Your health. Optimised.',
-    result: '200+ new patients in month one',
-    gradientFrom: '#2d1a3d',
-    gradientTo: '#120a18',
-    accent: '#8B5CF6',
-    url: 'summithealth.com.au',
+    result: '200+ new patients, month one',
+    bg: 'linear-gradient(140deg, #130a24 0%, #0a0514 100%)',
+    accent: '#7C3AED',
+    textAccent: '#A78BFA',
+    headline: 'Your health. Optimised.',
   },
 ]
 
-function BrowserCard({ project }: { project: typeof projects[0] }) {
+function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
   const [hovered, setHovered] = useState(false)
 
   return (
     <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       style={{
-        borderRadius: 16,
+        position: 'relative',
+        borderRadius: 12,
         overflow: 'hidden',
-        boxShadow: hovered
-          ? '0 24px 60px rgba(0,0,0,0.25)'
-          : '0 8px 32px rgba(0,0,0,0.12)',
-        background: '#1A1A1A',
         cursor: 'pointer',
-        transition: 'box-shadow 0.35s ease',
+        border: '1px solid rgba(255,255,255,0.05)',
       }}
     >
-      {/* Browser chrome */}
-      <div
+      {/* Website preview area */}
+      <motion.div
+        animate={{ scale: hovered ? 1.03 : 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         style={{
-          height: 38,
-          background: '#242424',
+          background: project.bg,
+          padding: '28px 24px 24px',
+          aspectRatio: '16/9',
+          position: 'relative',
           display: 'flex',
-          alignItems: 'center',
-          padding: '0 14px',
-          gap: 7,
-          borderBottom: '1px solid rgba(255,255,255,0.05)',
-          flexShrink: 0,
-        }}
-      >
-        <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#EF4444', display: 'block' }} />
-        <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#F59E0B', display: 'block' }} />
-        <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#22C55E', display: 'block' }} />
-        <div
-          style={{
-            flex: 1,
-            marginLeft: 10,
-            height: 22,
-            background: 'rgba(255,255,255,0.05)',
-            borderRadius: 6,
-            display: 'flex',
-            alignItems: 'center',
-            paddingLeft: 10,
-          }}
-        >
-          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', fontFamily: 'monospace' }}>
-            {project.url}
-          </span>
-        </div>
-      </div>
-
-      {/* Website preview */}
-      <div
-        style={{
-          height: 220,
-          background: `linear-gradient(135deg, ${project.gradientFrom}, ${project.gradientTo})`,
-          position: 'relative' as const,
-          overflow: 'hidden',
-          padding: '20px 18px',
+          flexDirection: 'column',
         }}
       >
         {/* Accent glow */}
         <div style={{
           position: 'absolute',
-          top: -20,
-          right: -20,
-          width: 120,
-          height: 120,
-          borderRadius: '50%',
-          background: `radial-gradient(circle, ${project.accent}30 0%, transparent 70%)`,
+          top: -20, right: -20,
+          width: 180, height: 180,
+          background: `radial-gradient(circle, ${project.accent}22 0%, transparent 70%)`,
+          pointerEvents: 'none',
         }} />
 
-        {/* Mock nav */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <div style={{ width: 60, height: 8, background: 'rgba(255,255,255,0.15)', borderRadius: 4 }} />
+        {/* Fake nav */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, position: 'relative', zIndex: 2 }}>
+          <div style={{ width: 60, height: 7, background: 'rgba(255,255,255,0.15)', borderRadius: 3 }} />
+          <div style={{ display: 'flex', gap: 12 }}>
+            {[40, 35, 45].map((w, j) => <div key={j} style={{ width: w, height: 5, background: 'rgba(255,255,255,0.08)', borderRadius: 2 }} />)}
+          </div>
+          <div style={{ width: 56, height: 22, background: project.accent, borderRadius: 4 }} />
+        </div>
+
+        {/* Fake headline */}
+        <div style={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 18, color: project.textAccent, marginBottom: 8, lineHeight: 1.2 }}>
+            {project.headline}
+          </div>
+          <div style={{ width: '65%', height: 7, background: 'rgba(255,255,255,0.1)', borderRadius: 3, marginBottom: 5 }} />
+          <div style={{ width: '45%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 3, marginBottom: 18 }} />
           <div style={{ display: 'flex', gap: 8 }}>
-            {[40, 35, 40].map((w, j) => <div key={j} style={{ width: w, height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 3 }} />)}
+            <div style={{ width: 72, height: 26, background: project.accent, borderRadius: 4 }} />
+            <div style={{ width: 72, height: 26, background: 'rgba(255,255,255,0.06)', borderRadius: 4, border: '1px solid rgba(255,255,255,0.1)' }} />
           </div>
-          <div style={{ width: 50, height: 22, borderRadius: 12, background: project.accent }} />
         </div>
+      </motion.div>
 
-        {/* Mock hero text */}
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ width: '75%', height: 14, background: 'rgba(255,255,255,0.2)', borderRadius: 4, marginBottom: 8 }} />
-          <div style={{ width: '55%', height: 14, background: 'rgba(255,255,255,0.2)', borderRadius: 4, marginBottom: 12 }} />
-          <div style={{ width: '85%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 3, marginBottom: 5 }} />
-          <div style={{ width: '65%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 3 }} />
-        </div>
-
-        {/* Overlay on hover */}
-        <motion.div
-          animate={{ opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.25 }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: '50%',
-              background: '#FF5C00',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M3 9h12M10 4l5 5-5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Card info */}
-      <div style={{ padding: '20px 20px 22px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-          <h3 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#ffffff', margin: 0 }}>
+      {/* Card footer */}
+      <div style={{
+        background: '#111111',
+        padding: '16px 20px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        <div>
+          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: '#ffffff', marginBottom: 3 }}>
             {project.name}
-          </h3>
-          <span
-            style={{
-              fontSize: '0.65rem',
-              fontWeight: 600,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.12em',
-              color: project.accent,
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
+          </div>
+          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: '#555555' }}>
             {project.category}
-          </span>
+          </div>
         </div>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: 'rgba(255,255,255,0.35)', margin: '0 0 12px' }}>
-          {project.tagline}
-        </p>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: '5px 10px',
-            borderRadius: 20,
-            background: 'rgba(255,92,0,0.12)',
-          }}
-        >
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="#FF5C00">
-            <path d="M1 7l2-2 2 1.5L7 3l2 1.5" stroke="#FF5C00" strokeWidth="1" strokeLinecap="round" fill="none" />
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 5,
+          padding: '5px 10px',
+          background: 'rgba(255,90,0,0.1)',
+          borderRadius: 20,
+        }}>
+          <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+            <path d="M1 6l2-2 2 2 3-5" stroke="#FF5A00" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#FF5C00', fontFamily: 'Inter, sans-serif' }}>
+          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', fontWeight: 600, color: '#FF5A00' }}>
             {project.result}
           </span>
         </div>
       </div>
+
+      {/* Hover overlay */}
+      <motion.div
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.2 }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(0,0,0,0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      >
+        <div style={{
+          width: 48, height: 48,
+          borderRadius: '50%',
+          background: '#FF5A00',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M3 9h12M9 4l5 5-5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </motion.div>
     </motion.div>
   )
 }
@@ -240,132 +196,131 @@ export default function Portfolio() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
-  const filtered = active === 'All' ? projects : projects.filter((p) => p.category === active)
+  const filtered = active === 'All' ? projects : projects.filter(p => p.category === active)
 
   return (
-    <section id="portfolio" style={{ backgroundColor: '#111111', padding: '120px 24px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div ref={ref} style={{ marginBottom: 56 }}>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{
-              fontSize: '0.7rem',
-              fontWeight: 600,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.2em',
-              color: '#FF5C00',
-              fontFamily: 'Inter, sans-serif',
-              marginBottom: 16,
-            }}
-          >
-            Our Work
-          </motion.p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24 }}>
+    <section id="portfolio" style={{ backgroundColor: '#0A0A0A', padding: 'clamp(80px, 10vw, 120px) 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
+
+        {/* Header */}
+        <div ref={ref} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24, marginBottom: 48 }}>
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                color: '#555555',
+                marginBottom: 14,
+              }}
+            >
+              Our Work
+            </motion.p>
             <motion.h2
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               style={{
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontWeight: 700,
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
-                lineHeight: 1.1,
+                fontSize: 'clamp(2rem, 4vw, 3.5rem)',
                 letterSpacing: '-0.03em',
+                lineHeight: 1.05,
                 color: '#ffffff',
                 margin: 0,
               }}
             >
               Websites that get results.
             </motion.h2>
-
-            {/* Filter pills */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
-            >
-              {FILTERS.map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setActive(f)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '9999px',
-                    fontSize: '0.8rem',
-                    fontWeight: 600,
-                    fontFamily: 'Inter, sans-serif',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    border: active === f ? 'none' : '1px solid rgba(255,255,255,0.12)',
-                    background: active === f ? '#FF5C00' : 'transparent',
-                    color: active === f ? '#ffffff' : 'rgba(255,255,255,0.45)',
-                  }}
-                >
-                  {f}
-                </button>
-              ))}
-            </motion.div>
           </div>
+
+          {/* Filter pills */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.25, duration: 0.5 }}
+            style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
+          >
+            {FILTERS.map(f => (
+              <button
+                key={f}
+                onClick={() => setActive(f)}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '9999px',
+                  fontSize: '0.8rem',
+                  fontWeight: 500,
+                  fontFamily: 'Inter, sans-serif',
+                  cursor: 'pointer',
+                  border: '1px solid',
+                  transition: 'all 0.2s ease',
+                  borderColor: active === f ? '#FF5A00' : 'rgba(255,255,255,0.1)',
+                  background: active === f ? '#FF5A00' : 'transparent',
+                  color: active === f ? '#ffffff' : 'rgba(255,255,255,0.4)',
+                }}
+              >
+                {f}
+              </button>
+            ))}
+          </motion.div>
         </div>
 
+        {/* Grid */}
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
               gap: 20,
             }}
           >
             {filtered.map((p, i) => (
-              <motion.div
-                key={p.name}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <BrowserCard project={p} />
-              </motion.div>
+              <ProjectCard key={p.name} project={p} index={i} />
             ))}
           </motion.div>
         </AnimatePresence>
 
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.6 }}
           style={{ textAlign: 'center', marginTop: 56 }}
         >
           <motion.a
             href="#contact"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.03, backgroundColor: '#f0f0f0' }}
+            whileTap={{ scale: 0.98 }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: 8,
               padding: '14px 32px',
               borderRadius: '9999px',
-              fontSize: '0.95rem',
-              fontWeight: 600,
-              color: '#ffffff',
-              backgroundColor: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              background: '#ffffff',
+              color: '#0A0A0A',
               textDecoration: 'none',
               fontFamily: 'Inter, sans-serif',
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              letterSpacing: '-0.01em',
+              transition: 'background 0.2s ease',
             }}
           >
             Start Your Project
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </motion.a>
         </motion.div>

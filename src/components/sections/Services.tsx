@@ -1,264 +1,243 @@
 'use client'
 
-import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 
-const services = [
-  {
-    id: 'web',
-    eyebrow: '01 · Website Design',
-    headline: 'A website that works as hard as you do.',
-    description:
-      'Every website we build is custom-designed, mobile-first, and optimised to convert visitors into paying customers. No templates. No shortcuts.',
-    features: [
-      'Custom design, no templates',
-      'Mobile-first & fully responsive',
-      'SEO optimised from day one',
-      'Fast loading — 95+ Lighthouse score',
-      'Built to convert visitors into leads',
-      'CMS ready for easy content updates',
-    ],
-    cta: 'Start My Website',
-    href: '#contact',
-    dark: true,
-  },
-  {
-    id: 'social',
-    eyebrow: '02 · Social Media Management',
-    headline: 'Social media that actually grows your business.',
-    description:
-      "We handle everything — content creation, posting, strategy, and growth. You focus on running your business. We'll handle the rest.",
-    features: [
-      'Content creation & copywriting',
-      'Daily posting across all platforms',
-      'Growth strategy & planning',
-      'Professional photography & video',
-      'Community management',
-      'Paid advertising management',
-    ],
-    cta: 'Grow My Socials',
-    href: '#contact',
-    dark: false,
-  },
-]
+// ─── Client logos strip ───────────────────────────────────────────────────────
+const LOGOS = ['LORDE', 'STAX.', 'AURORA', 'bloom', 'VENTURE', 'MOMENTUM']
 
-function CheckIcon() {
+function LogoStrip() {
   return (
-    <span
-      style={{
-        width: 20,
-        height: 20,
-        borderRadius: '50%',
-        background: 'rgba(255,92,0,0.12)',
+    <div style={{
+      borderTop: '1px solid rgba(0,0,0,0.07)',
+      padding: '32px 0 0',
+      marginTop: 64,
+    }}>
+      <p style={{
+        fontFamily: 'Inter, sans-serif',
+        fontSize: '0.72rem',
+        fontWeight: 500,
+        textTransform: 'uppercase',
+        letterSpacing: '0.18em',
+        color: '#AAAAAA',
+        marginBottom: 28,
+        textAlign: 'center',
+      }}>
+        Trusted by Australian businesses
+      </p>
+      <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        flexShrink: 0,
-      }}
-    >
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path d="M2 5l2.5 2.5L8 2.5" stroke="#FF5C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
-  )
-}
-
-function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        borderRadius: 24,
-        padding: '48px',
-        background: service.dark ? '#111111' : '#ffffff',
-        border: service.dark ? 'none' : '1px solid rgba(17,17,17,0.08)',
-        boxShadow: service.dark
-          ? '0 24px 60px rgba(0,0,0,0.15)'
-          : '0 8px 40px rgba(0,0,0,0.06)',
-        display: 'flex',
-        flexDirection: 'column' as const,
-        gap: 28,
-        position: 'relative' as const,
-        overflow: 'hidden',
-      }}
-    >
-      {service.dark && (
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute',
-            inset: 0,
-            pointerEvents: 'none',
-            background: 'radial-gradient(ellipse 80% 60% at 100% 0%, rgba(255,92,0,0.1) 0%, transparent 60%)',
-          }}
-        />
-      )}
-
-      <span
-        style={{
-          fontSize: '0.7rem',
-          fontWeight: 600,
-          textTransform: 'uppercase' as const,
-          letterSpacing: '0.2em',
-          color: '#FF5C00',
-          fontFamily: 'Inter, sans-serif',
-        }}
-      >
-        {service.eyebrow}
-      </span>
-
-      <div>
-        <h3
-          style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontWeight: 700,
-            fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
-            lineHeight: 1.2,
-            letterSpacing: '-0.02em',
-            color: service.dark ? '#ffffff' : '#111111',
-            margin: '0 0 14px',
-          }}
-        >
-          {service.headline}
-        </h3>
-        <p
-          style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '0.98rem',
-            lineHeight: 1.7,
-            color: service.dark ? 'rgba(255,255,255,0.5)' : 'rgba(17,17,17,0.55)',
-            margin: 0,
-          }}
-        >
-          {service.description}
-        </p>
-      </div>
-
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
-        {service.features.map((f) => (
-          <li
-            key={f}
+        gap: 'clamp(24px, 4vw, 64px)',
+        flexWrap: 'wrap',
+      }}>
+        {LOGOS.map((logo, i) => (
+          <motion.span
+            key={logo}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.07, duration: 0.5 }}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '0.88rem',
-              color: service.dark ? 'rgba(255,255,255,0.65)' : 'rgba(17,17,17,0.7)',
+              fontFamily: logo === 'bloom' ? 'Georgia, serif' : 'Space Grotesk, sans-serif',
+              fontWeight: logo === 'bloom' ? 400 : 700,
+              fontStyle: logo === 'bloom' ? 'italic' : 'normal',
+              fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
+              color: '#AAAAAA',
+              letterSpacing: logo === 'bloom' ? '0' : '0.05em',
             }}
           >
-            <CheckIcon />
-            {f}
-          </li>
+            {logo}
+          </motion.span>
         ))}
-      </ul>
-
-      <motion.a
-        href={service.href}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 8,
-          padding: '13px 26px',
-          borderRadius: '9999px',
-          fontSize: '0.9rem',
-          fontWeight: 600,
-          color: '#ffffff',
-          backgroundColor: '#FF5C00',
-          textDecoration: 'none',
-          fontFamily: 'Inter, sans-serif',
-          boxShadow: '0 8px 24px rgba(255,92,0,0.28)',
-          alignSelf: 'flex-start' as const,
-          marginTop: 4,
-        }}
-      >
-        {service.cta}
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </motion.a>
-    </motion.div>
+      </div>
+    </div>
   )
 }
+
+// ─── Service card icons ───────────────────────────────────────────────────────
+function MonitorIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#0A0A0A" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="18" height="13" rx="2"/>
+      <path d="M7 19h8M11 16v3"/>
+    </svg>
+  )
+}
+
+function ChartIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#0A0A0A" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 16l4-5 4 3 4-7"/>
+      <rect x="2" y="2" width="18" height="18" rx="2"/>
+    </svg>
+  )
+}
+
+// ─── Single service card ──────────────────────────────────────────────────────
+const services = [
+  {
+    icon: <MonitorIcon />,
+    title: 'Website Design',
+    description: 'Custom, high-performance websites built to convert visitors into customers.',
+    features: ['Mobile-first design', 'SEO optimised', 'Fast loading', 'Built to convert'],
+  },
+  {
+    icon: <ChartIcon />,
+    title: 'Social Media Management',
+    description: 'Strategic content and management that grows your brand and audience.',
+    features: ['Content creation', 'Community management', 'Paid advertising', 'Monthly reporting'],
+  },
+]
 
 export default function Services() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="services" style={{ backgroundColor: '#F8F7F4', padding: '120px 24px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div ref={ref} style={{ marginBottom: 64 }}>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{
-              fontSize: '0.7rem',
-              fontWeight: 600,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.2em',
-              color: '#FF5C00',
-              fontFamily: 'Inter, sans-serif',
-              marginBottom: 16,
-            }}
-          >
-            What We Do
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontWeight: 700,
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              lineHeight: 1.1,
-              letterSpacing: '-0.03em',
-              color: '#111111',
-              margin: '0 0 16px',
-              maxWidth: 520,
-            }}
-          >
-            Two services. One focus. Your growth.
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '1rem',
-              color: 'rgba(17,17,17,0.5)',
-              maxWidth: 440,
-              lineHeight: 1.7,
-              margin: 0,
-            }}
-          >
-            We build beautiful websites that generate leads, and manage social media that grows businesses. That's it.
-          </motion.p>
-        </div>
+    <section id="services" style={{ backgroundColor: '#ffffff', padding: 'clamp(80px, 10vw, 120px) 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
 
+        {/* Top row: Heading left + cards right */}
         <div
+          ref={ref}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: 24,
+            gridTemplateColumns: 'minmax(220px, 360px) 1fr',
+            gap: 'clamp(32px, 5vw, 80px)',
+            alignItems: 'start',
           }}
         >
-          {services.map((s, i) => (
-            <ServiceCard key={s.id} service={s} index={i} />
-          ))}
+          {/* Left heading */}
+          <div style={{ paddingTop: 4 }}>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                color: '#AAAAAA',
+                marginBottom: 16,
+              }}
+            >
+              What We Do
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontWeight: 700,
+                fontSize: 'clamp(2rem, 3.5vw, 2.8rem)',
+                lineHeight: 1.1,
+                letterSpacing: '-0.03em',
+                color: '#0A0A0A',
+                margin: 0,
+              }}
+            >
+              Everything you need to build and grow online.
+            </motion.h2>
+          </div>
+
+          {/* Right: Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            {services.map((s, i) => (
+              <motion.div
+                key={s.title}
+                initial={{ opacity: 0, y: 24 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.15 + i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(0,0,0,0.08)' }}
+                style={{
+                  border: '1px solid rgba(0,0,0,0.09)',
+                  borderRadius: 16,
+                  padding: '28px 24px',
+                  background: '#ffffff',
+                  transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                }}
+              >
+                {/* Icon */}
+                <div style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 10,
+                  background: '#F5F5F5',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 20,
+                }}>
+                  {s.icon}
+                </div>
+
+                <h3 style={{
+                  fontFamily: 'Space Grotesk, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                  color: '#0A0A0A',
+                  margin: '0 0 8px',
+                  letterSpacing: '-0.01em',
+                }}>
+                  {s.title}
+                </h3>
+
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.83rem',
+                  lineHeight: 1.65,
+                  color: '#666666',
+                  margin: '0 0 20px',
+                }}>
+                  {s.description}
+                </p>
+
+                <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 7 }}>
+                  {s.features.map(f => (
+                    <li key={f} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '0.8rem',
+                      color: '#555555',
+                    }}>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M2 6l3 3 5-6" stroke="#FF5A00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
         </div>
+
+        {/* Client logos */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+        >
+          <LogoStrip />
+        </motion.div>
       </div>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .services-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 640px) {
+          .cards-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   )
 }

@@ -46,13 +46,11 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ delay: index * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        borderBottom: '1px solid rgba(17,17,17,0.08)',
-      }}
+      transition={{ delay: index * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
     >
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(v => !v)}
         style={{
           width: '100%',
           display: 'flex',
@@ -63,37 +61,35 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          textAlign: 'left' as const,
+          textAlign: 'left',
         }}
       >
-        <span
-          style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontWeight: 600,
-            fontSize: '1rem',
-            color: '#111111',
-            lineHeight: 1.4,
-          }}
-        >
+        <span style={{
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontWeight: 600,
+          fontSize: '1rem',
+          color: '#0A0A0A',
+          lineHeight: 1.4,
+          letterSpacing: '-0.01em',
+        }}>
           {q}
         </span>
         <motion.div
           animate={{ rotate: open ? 45 : 0 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           style={{
-            width: 32,
-            height: 32,
+            width: 28,
+            height: 28,
             borderRadius: '50%',
-            background: open ? '#FF5C00' : 'rgba(17,17,17,0.06)',
+            background: open ? '#FF5A00' : 'rgba(0,0,0,0.06)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
-            transition: 'background-color 0.2s ease',
           }}
         >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M7 2v10M2 7h10" stroke={open ? '#ffffff' : '#111111'} strokeWidth="1.5" strokeLinecap="round" />
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 2v8M2 6h8" stroke={open ? '#ffffff' : '#0A0A0A'} strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
         </motion.div>
       </button>
@@ -107,16 +103,14 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             style={{ overflow: 'hidden' }}
           >
-            <p
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.95rem',
-                lineHeight: 1.7,
-                color: 'rgba(17,17,17,0.58)',
-                margin: '0 0 24px',
-                paddingRight: 56,
-              }}
-            >
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.9rem',
+              lineHeight: 1.75,
+              color: '#888888',
+              margin: '0 0 24px',
+              paddingRight: 52,
+            }}>
               {a}
             </p>
           </motion.div>
@@ -131,91 +125,103 @@ export default function FAQ() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="faq" style={{ backgroundColor: '#F8F7F4', padding: '120px 24px' }}>
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
-        <div ref={ref} style={{ marginBottom: 64, textAlign: 'center' }}>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{
-              fontSize: '0.7rem',
-              fontWeight: 600,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.2em',
-              color: '#FF5C00',
-              fontFamily: 'Inter, sans-serif',
-              marginBottom: 16,
-            }}
-          >
-            FAQ
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontWeight: 700,
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              lineHeight: 1.1,
-              letterSpacing: '-0.03em',
-              color: '#111111',
-              margin: 0,
-            }}
-          >
-            Questions answered.
-          </motion.h2>
-        </div>
+    <section id="faq" style={{ backgroundColor: '#0A0A0A', padding: 'clamp(80px, 10vw, 120px) 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
 
-        <div>
-          {faqs.map((item, i) => (
-            <FAQItem key={i} q={item.q} a={item.a} index={i} />
-          ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+        <div
+          ref={ref}
           style={{
-            marginTop: 56,
-            padding: '32px',
-            background: '#ffffff',
-            borderRadius: 20,
-            border: '1px solid rgba(17,17,17,0.07)',
-            textAlign: 'center',
+            display: 'grid',
+            gridTemplateColumns: 'minmax(240px, 380px) 1fr',
+            gap: 'clamp(40px, 8vw, 120px)',
+            alignItems: 'start',
           }}
         >
-          <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: '1rem', color: '#111', margin: '0 0 8px' }}>
-            Still have questions?
-          </p>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', color: 'rgba(17,17,17,0.5)', margin: '0 0 20px' }}>
-            We're happy to chat. Book a free 30-minute discovery call with our team.
-          </p>
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '12px 24px',
-              borderRadius: '9999px',
-              fontSize: '0.9rem',
-              fontWeight: 600,
-              color: '#ffffff',
-              backgroundColor: '#FF5C00',
-              textDecoration: 'none',
-              fontFamily: 'Inter, sans-serif',
-              boxShadow: '0 6px 20px rgba(255,92,0,0.25)',
-            }}
-          >
-            Book A Free Call
-          </motion.a>
-        </motion.div>
+          {/* Left */}
+          <div style={{ position: 'sticky', top: 100 }}>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                color: '#444444',
+                marginBottom: 16,
+              }}
+            >
+              FAQ
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontWeight: 700,
+                fontSize: 'clamp(2rem, 3.5vw, 3rem)',
+                lineHeight: 1.1,
+                letterSpacing: '-0.03em',
+                color: '#ffffff',
+                margin: '0 0 24px',
+              }}
+            >
+              Questions answered.
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.25, duration: 0.6 }}
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.88rem',
+                lineHeight: 1.7,
+                color: '#555555',
+                margin: 0,
+              }}
+            >
+              Still have questions? Book a free 30-minute discovery call — we're happy to chat.
+            </motion.p>
+            <motion.a
+              href="#contact"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.35, duration: 0.6 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                marginTop: 24,
+                padding: '11px 22px',
+                borderRadius: '9999px',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                color: '#0A0A0A',
+                background: '#ffffff',
+                textDecoration: 'none',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              Book A Free Call
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                <path d="M1.5 5.5h8M6 2l3.5 3.5L6 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </motion.a>
+          </div>
+
+          {/* Right: accordion */}
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+            {faqs.map((item, i) => (
+              <FAQItem key={i} q={item.q} a={item.a} index={i} />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )
