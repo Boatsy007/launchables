@@ -69,7 +69,6 @@ export default function Pricing() {
     <section id="pricing" style={{ backgroundColor: '#ffffff', padding: 'clamp(80px, 10vw, 120px) 0' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
 
-        {/* Header */}
         <div ref={ref} style={{ marginBottom: 72 }}>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -122,7 +121,6 @@ export default function Pricing() {
           </div>
         </div>
 
-        {/* Plans */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
@@ -142,7 +140,6 @@ export default function Pricing() {
                 paddingRight: i === 2 ? 0 : 32,
                 position: 'relative',
                 background: plan.featured ? '#0A0A0A' : 'transparent',
-                borderRadius: plan.featured ? 0 : 0,
                 display: 'flex',
                 flexDirection: 'column',
               }}
@@ -155,12 +152,12 @@ export default function Pricing() {
                   display: 'inline-flex',
                   alignItems: 'center',
                   padding: '4px 10px',
-                  background: '#FF5A00',
+                  background: '#ffffff',
                   borderRadius: '9999px',
                   fontFamily: 'Inter, sans-serif',
                   fontSize: '0.65rem',
                   fontWeight: 700,
-                  color: '#ffffff',
+                  color: '#0A0A0A',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                 }}>
@@ -224,7 +221,7 @@ export default function Pricing() {
                     color: plan.featured ? '#888888' : '#666666',
                   }}>
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
-                      <path d="M2 6l3 3 5-6" stroke="#FF5A00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2 6l3 3 5-6" stroke={plan.featured ? '#ffffff' : '#0A0A0A'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     {f}
                   </li>
@@ -247,8 +244,8 @@ export default function Pricing() {
                   fontFamily: 'Inter, sans-serif',
                   textDecoration: 'none',
                   border: plan.featured ? 'none' : '1px solid rgba(0,0,0,0.15)',
-                  background: plan.featured ? '#FF5A00' : 'transparent',
-                  color: plan.featured ? '#ffffff' : '#0A0A0A',
+                  background: plan.featured ? '#ffffff' : 'transparent',
+                  color: plan.featured ? '#0A0A0A' : '#0A0A0A',
                   letterSpacing: '-0.01em',
                 }}
               >

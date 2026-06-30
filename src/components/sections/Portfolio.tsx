@@ -3,9 +3,19 @@
 import { useState, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 
-const FILTERS = ['All', 'Trades', 'Hospitality', 'Services', 'Health']
+const FILTERS = ['All', 'Trades', 'Hospitality', 'Services', 'Health', 'Commercial']
 
 const projects = [
+  {
+    name: 'Swept Services',
+    category: 'Commercial',
+    result: 'Booked solid, 6 weeks post-launch',
+    bg: 'linear-gradient(140deg, #0d1929 0%, #091420 100%)',
+    accent: '#2BAEF5',
+    textAccent: '#2BAEF5',
+    headline: 'Commercial sweeping done right.',
+    swept: true,
+  },
   {
     name: 'Apex Plumbing',
     category: 'Trades',
@@ -62,7 +72,53 @@ const projects = [
   },
 ]
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+type Project = {
+  name: string
+  category: string
+  result: string
+  bg: string
+  accent: string
+  textAccent: string
+  headline: string
+  swept?: boolean
+}
+
+function SweptPreview({ accent }: { accent: string }) {
+  return (
+    <div style={{ width: '100%', height: '100%', background: '#0d1929', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
+      {/* Nav */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 13, color: '#ffffff' }}>Swept</span>
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: accent, display: 'inline-block', marginBottom: 2 }} />
+        </div>
+        <div style={{ display: 'flex', gap: 14 }}>
+          {['Services', 'Industries', 'Equipment', 'Gallery'].map(l => (
+            <span key={l} style={{ fontFamily: 'Inter, sans-serif', fontSize: 9.5, color: 'rgba(255,255,255,0.38)' }}>{l}</span>
+          ))}
+        </div>
+        <div style={{ background: accent, color: '#fff', fontSize: 9, fontWeight: 700, fontFamily: 'Inter, sans-serif', padding: '4px 10px', borderRadius: 4 }}>Get a Quote</div>
+      </div>
+      {/* Hero */}
+      <div style={{ flex: 1, padding: '20px 20px', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(13,25,41,0.95) 50%, rgba(13,25,41,0.4) 100%)' }} />
+        <div style={{ position: 'relative', zIndex: 2 }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 8, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent, marginBottom: 8 }}>
+            Commercial Sweeping — South East Queensland
+          </p>
+          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 800, fontSize: 19, color: '#ffffff', lineHeight: 1.1, marginBottom: 10 }}>
+            COMMERCIAL<br />SWEEPING<br />DONE <span style={{ color: accent }}>RIGHT.</span>
+          </div>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.45)', lineHeight: 1.5, maxWidth: 180 }}>
+            Professional commercial sweeping across South East Queensland.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -80,49 +136,50 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         border: '1px solid rgba(255,255,255,0.05)',
       }}
     >
-      {/* Website preview area */}
       <motion.div
         animate={{ scale: hovered ? 1.03 : 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         style={{
           background: project.bg,
-          padding: '28px 24px 24px',
+          padding: project.swept ? 0 : '28px 24px 24px',
           aspectRatio: '16/9',
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
         }}
       >
-        {/* Accent glow */}
-        <div style={{
-          position: 'absolute',
-          top: -20, right: -20,
-          width: 180, height: 180,
-          background: `radial-gradient(circle, ${project.accent}22 0%, transparent 70%)`,
-          pointerEvents: 'none',
-        }} />
+        {project.swept ? (
+          <SweptPreview accent={project.accent} />
+        ) : (
+          <>
+            <div style={{
+              position: 'absolute', top: -20, right: -20,
+              width: 180, height: 180,
+              background: `radial-gradient(circle, ${project.accent}22 0%, transparent 70%)`,
+              pointerEvents: 'none',
+            }} />
 
-        {/* Fake nav */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, position: 'relative', zIndex: 2 }}>
-          <div style={{ width: 60, height: 7, background: 'rgba(255,255,255,0.15)', borderRadius: 3 }} />
-          <div style={{ display: 'flex', gap: 12 }}>
-            {[40, 35, 45].map((w, j) => <div key={j} style={{ width: w, height: 5, background: 'rgba(255,255,255,0.08)', borderRadius: 2 }} />)}
-          </div>
-          <div style={{ width: 56, height: 22, background: project.accent, borderRadius: 4 }} />
-        </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, position: 'relative', zIndex: 2 }}>
+              <div style={{ width: 60, height: 7, background: 'rgba(255,255,255,0.15)', borderRadius: 3 }} />
+              <div style={{ display: 'flex', gap: 12 }}>
+                {[40, 35, 45].map((w, j) => <div key={j} style={{ width: w, height: 5, background: 'rgba(255,255,255,0.08)', borderRadius: 2 }} />)}
+              </div>
+              <div style={{ width: 56, height: 22, background: project.accent, borderRadius: 4 }} />
+            </div>
 
-        {/* Fake headline */}
-        <div style={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 18, color: project.textAccent, marginBottom: 8, lineHeight: 1.2 }}>
-            {project.headline}
-          </div>
-          <div style={{ width: '65%', height: 7, background: 'rgba(255,255,255,0.1)', borderRadius: 3, marginBottom: 5 }} />
-          <div style={{ width: '45%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 3, marginBottom: 18 }} />
-          <div style={{ display: 'flex', gap: 8 }}>
-            <div style={{ width: 72, height: 26, background: project.accent, borderRadius: 4 }} />
-            <div style={{ width: 72, height: 26, background: 'rgba(255,255,255,0.06)', borderRadius: 4, border: '1px solid rgba(255,255,255,0.1)' }} />
-          </div>
-        </div>
+            <div style={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 18, color: project.textAccent, marginBottom: 8, lineHeight: 1.2 }}>
+                {project.headline}
+              </div>
+              <div style={{ width: '65%', height: 7, background: 'rgba(255,255,255,0.1)', borderRadius: 3, marginBottom: 5 }} />
+              <div style={{ width: '45%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 3, marginBottom: 18 }} />
+              <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ width: 72, height: 26, background: project.accent, borderRadius: 4 }} />
+                <div style={{ width: 72, height: 26, background: 'rgba(255,255,255,0.06)', borderRadius: 4, border: '1px solid rgba(255,255,255,0.1)' }} />
+              </div>
+            </div>
+          </>
+        )}
       </motion.div>
 
       {/* Card footer */}
@@ -138,7 +195,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: '#ffffff', marginBottom: 3 }}>
             {project.name}
           </div>
-          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: '#555555' }}>
+          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: '#444444' }}>
             {project.category}
           </div>
         </div>
@@ -147,13 +204,14 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           alignItems: 'center',
           gap: 5,
           padding: '5px 10px',
-          background: 'rgba(255,90,0,0.1)',
+          background: 'rgba(255,255,255,0.06)',
+          border: '1px solid rgba(255,255,255,0.1)',
           borderRadius: 20,
         }}>
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
-            <path d="M1 6l2-2 2 2 3-5" stroke="#FF5A00" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M1 6l2-2 2 2 3-5" stroke="rgba(255,255,255,0.6)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', fontWeight: 600, color: '#FF5A00' }}>
+          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.6)' }}>
             {project.result}
           </span>
         </div>
@@ -164,9 +222,8 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: 0.2 }}
         style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(0,0,0,0.3)',
+          position: 'absolute', inset: 0,
+          background: 'rgba(0,0,0,0.35)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -177,13 +234,13 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         <div style={{
           width: 48, height: 48,
           borderRadius: '50%',
-          background: '#FF5A00',
+          background: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M3 9h12M9 4l5 5-5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M3 9h12M9 4l5 5-5 5" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
       </motion.div>
@@ -202,7 +259,6 @@ export default function Portfolio() {
     <section id="portfolio" style={{ backgroundColor: '#0A0A0A', padding: 'clamp(80px, 10vw, 120px) 0' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
 
-        {/* Header */}
         <div ref={ref} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24, marginBottom: 48 }}>
           <div>
             <motion.p
@@ -215,7 +271,7 @@ export default function Portfolio() {
                 fontWeight: 600,
                 textTransform: 'uppercase',
                 letterSpacing: '0.2em',
-                color: '#555555',
+                color: '#444444',
                 marginBottom: 14,
               }}
             >
@@ -239,7 +295,6 @@ export default function Portfolio() {
             </motion.h2>
           </div>
 
-          {/* Filter pills */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
@@ -259,9 +314,9 @@ export default function Portfolio() {
                   cursor: 'pointer',
                   border: '1px solid',
                   transition: 'all 0.2s ease',
-                  borderColor: active === f ? '#FF5A00' : 'rgba(255,255,255,0.1)',
-                  background: active === f ? '#FF5A00' : 'transparent',
-                  color: active === f ? '#ffffff' : 'rgba(255,255,255,0.4)',
+                  borderColor: active === f ? '#ffffff' : 'rgba(255,255,255,0.1)',
+                  background: active === f ? '#ffffff' : 'transparent',
+                  color: active === f ? '#0A0A0A' : 'rgba(255,255,255,0.35)',
                 }}
               >
                 {f}
@@ -270,7 +325,6 @@ export default function Portfolio() {
           </motion.div>
         </div>
 
-        {/* Grid */}
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
@@ -290,7 +344,6 @@ export default function Portfolio() {
           </motion.div>
         </AnimatePresence>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -300,7 +353,7 @@ export default function Portfolio() {
         >
           <motion.a
             href="#contact"
-            whileHover={{ scale: 1.03, backgroundColor: '#f0f0f0' }}
+            whileHover={{ scale: 1.03, backgroundColor: '#eeeeee' }}
             whileTap={{ scale: 0.98 }}
             style={{
               display: 'inline-flex',

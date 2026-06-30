@@ -26,7 +26,6 @@ export default function FinalCTA() {
             alignItems: 'center',
           }}
         >
-          {/* Left */}
           <div>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -80,7 +79,6 @@ export default function FinalCTA() {
               Let's build something great. Book a free discovery call and we'll show you exactly how we can help your business grow.
             </motion.p>
 
-            {/* Stats row */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
@@ -109,11 +107,7 @@ export default function FinalCTA() {
                   }}>
                     {s.val}
                   </div>
-                  <div style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '0.8rem',
-                    color: '#AAAAAA',
-                  }}>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: '#AAAAAA' }}>
                     {s.label}
                   </div>
                 </div>
@@ -121,17 +115,11 @@ export default function FinalCTA() {
             </motion.div>
           </div>
 
-          {/* Right: CTAs */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.35, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 12,
-              minWidth: 200,
-            }}
+            style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 200 }}
           >
             <motion.a
               href="#contact"

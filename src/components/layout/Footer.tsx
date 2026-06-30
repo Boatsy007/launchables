@@ -16,7 +16,7 @@ function LogoMark({ size = 28 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 36 36" fill="none">
       <rect x="2" y="2" width="7" height="28" rx="1.5" fill="#ffffff" />
       <rect x="2" y="23" width="15" height="7" rx="1.5" fill="#ffffff" />
-      <path d="M20 4L35 16L20 28" stroke="#FF5A00" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M20 4L35 16L20 28" stroke="#ffffff" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   )
 }
@@ -49,7 +49,6 @@ export default function Footer() {
     }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
 
-        {/* Main row */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr auto auto auto',
@@ -57,7 +56,6 @@ export default function Footer() {
           marginBottom: 56,
           alignItems: 'start',
         }}>
-          {/* Brand */}
           <div>
             <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, textDecoration: 'none', marginBottom: 16 }}>
               <LogoMark size={26} />
@@ -99,7 +97,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Navigation */}
           <div>
             <p style={{
               fontFamily: 'Inter, sans-serif',
@@ -134,7 +131,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Services */}
           <div>
             <p style={{
               fontFamily: 'Inter, sans-serif',
@@ -169,7 +165,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
           <div>
             <p style={{
               fontFamily: 'Inter, sans-serif',
@@ -225,7 +220,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div style={{
           borderTop: '1px solid rgba(255,255,255,0.06)',
           paddingTop: 24,
@@ -240,16 +234,7 @@ export default function Footer() {
           </p>
           <div style={{ display: 'flex', gap: 20 }}>
             {['Privacy Policy', 'Terms of Service'].map(l => (
-              <a
-                key={l}
-                href="#"
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '0.75rem',
-                  color: '#333333',
-                  textDecoration: 'none',
-                }}
-              >
+              <a key={l} href="#" style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: '#333333', textDecoration: 'none' }}>
                 {l}
               </a>
             ))}

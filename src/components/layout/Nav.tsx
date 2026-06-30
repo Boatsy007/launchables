@@ -36,7 +36,7 @@ export default function Nav() {
   }, [menuOpen])
 
   const textColor = scrolled ? '#0A0A0A' : '#ffffff'
-  const textMuted = scrolled ? 'rgba(10,10,10,0.5)' : 'rgba(255,255,255,0.55)'
+  const textMuted = scrolled ? 'rgba(10,10,10,0.45)' : 'rgba(255,255,255,0.5)'
 
   return (
     <>
@@ -44,14 +44,7 @@ export default function Nav() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 50,
-          padding: '0 32px',
-        }}
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, padding: '0 32px' }}
       >
         <motion.div
           animate={{
@@ -68,12 +61,10 @@ export default function Nav() {
             borderBottom: '1px solid transparent',
           }}
         >
-          {/* Logo */}
           <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
             <LogoMark dark={scrolled} />
           </a>
 
-          {/* Desktop centre links */}
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link, i) => (
               <motion.a
@@ -98,7 +89,6 @@ export default function Nav() {
             ))}
           </div>
 
-          {/* CTA + hamburger */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <motion.a
               href="#contact"
@@ -127,7 +117,6 @@ export default function Nav() {
               </svg>
             </motion.a>
 
-            {/* Mobile hamburger */}
             <button
               className="md:hidden"
               onClick={() => setMenuOpen(v => !v)}
@@ -147,7 +136,6 @@ export default function Nav() {
         </motion.div>
       </motion.nav>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -179,7 +167,7 @@ export default function Nav() {
                   letterSpacing: '-0.03em',
                   padding: '8px 0',
                 }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#FF5A00')}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'rgba(255,255,255,0.4)')}
                 onMouseLeave={(e) => ((e.target as HTMLElement).style.color = '#ffffff')}
               >
                 {link.label}
@@ -195,8 +183,8 @@ export default function Nav() {
                 marginTop: 24,
                 padding: '14px 32px',
                 borderRadius: '9999px',
-                background: '#FF5A00',
-                color: '#fff',
+                background: '#ffffff',
+                color: '#0A0A0A',
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: 600,
                 textDecoration: 'none',

@@ -52,7 +52,7 @@ function Stars() {
   return (
     <div style={{ display: 'flex', gap: 2, marginBottom: 20 }}>
       {[...Array(5)].map((_, i) => (
-        <svg key={i} width="12" height="12" viewBox="0 0 12 12" fill="#FF5A00">
+        <svg key={i} width="12" height="12" viewBox="0 0 12 12" fill="#ffffff">
           <path d="M6 1l1.2 2.6 2.8.4-2 2 .5 2.8L6 7.5 3.5 8.8l.5-2.8-2-2 2.8-.4z" />
         </svg>
       ))}
@@ -68,7 +68,6 @@ export default function Testimonials() {
     <section id="testimonials" style={{ backgroundColor: '#0A0A0A', padding: 'clamp(80px, 10vw, 120px) 0' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
 
-        {/* Header */}
         <div ref={ref} style={{ marginBottom: 72 }}>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -105,7 +104,6 @@ export default function Testimonials() {
           </motion.h2>
         </div>
 
-        {/* Grid */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
@@ -119,7 +117,7 @@ export default function Testimonials() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               style={{
-                padding: '40px 32px 40px',
+                padding: '40px 32px',
                 borderRight: (i + 1) % 3 !== 0 ? '1px solid rgba(255,255,255,0.06)' : 'none',
                 borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none',
                 paddingLeft: i % 3 === 0 ? 0 : 32,
@@ -132,7 +130,7 @@ export default function Testimonials() {
                 fontFamily: 'Inter, sans-serif',
                 fontSize: '0.9rem',
                 lineHeight: 1.75,
-                color: '#888888',
+                color: '#666666',
                 margin: '0 0 28px',
               }}>
                 "{t.quote}"
@@ -140,11 +138,10 @@ export default function Testimonials() {
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{
-                  width: 36,
-                  height: 36,
+                  width: 36, height: 36,
                   borderRadius: '50%',
-                  background: 'rgba(255,90,0,0.15)',
-                  border: '1px solid rgba(255,90,0,0.3)',
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -154,7 +151,7 @@ export default function Testimonials() {
                     fontFamily: 'Space Grotesk, sans-serif',
                     fontWeight: 700,
                     fontSize: '0.7rem',
-                    color: '#FF5A00',
+                    color: 'rgba(255,255,255,0.5)',
                   }}>
                     {t.initials}
                   </span>

@@ -37,7 +37,7 @@ export default function Process() {
   return (
     <section id="process" style={{ backgroundColor: '#0A0A0A', padding: 'clamp(80px, 10vw, 120px) 0' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
-        {/* Header */}
+
         <div ref={ref} style={{ marginBottom: 72 }}>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -74,7 +74,6 @@ export default function Process() {
           </motion.h2>
         </div>
 
-        {/* Steps grid */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -93,18 +92,11 @@ export default function Process() {
                 paddingLeft: i === 0 ? 0 : 32,
               }}
             >
-              {/* Number accent */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                marginBottom: 28,
-              }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
                 <div style={{
-                  width: 36,
-                  height: 36,
+                  width: 36, height: 36,
                   borderRadius: 8,
-                  background: i === 0 ? '#FF5A00' : 'rgba(255,255,255,0.05)',
+                  background: i === 0 ? '#ffffff' : 'rgba(255,255,255,0.05)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -113,7 +105,7 @@ export default function Process() {
                     fontFamily: 'Space Grotesk, sans-serif',
                     fontWeight: 700,
                     fontSize: '0.72rem',
-                    color: i === 0 ? '#ffffff' : '#444444',
+                    color: i === 0 ? '#0A0A0A' : '#444444',
                     letterSpacing: '0.05em',
                   }}>
                     {step.n}
@@ -128,7 +120,7 @@ export default function Process() {
                 fontWeight: 600,
                 textTransform: 'uppercase',
                 letterSpacing: '0.18em',
-                color: '#FF5A00',
+                color: 'rgba(255,255,255,0.3)',
                 marginBottom: 10,
               }}>
                 {step.label}
@@ -158,15 +150,6 @@ export default function Process() {
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .process-grid { grid-template-columns: 1fr 1fr !important; }
-        }
-        @media (max-width: 480px) {
-          .process-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </section>
   )
 }

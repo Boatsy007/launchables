@@ -47,7 +47,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ delay: index * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
+      style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
     >
       <button
         onClick={() => setOpen(v => !v)}
@@ -68,7 +68,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
           fontFamily: 'Space Grotesk, sans-serif',
           fontWeight: 600,
           fontSize: '1rem',
-          color: '#0A0A0A',
+          color: '#ffffff',
           lineHeight: 1.4,
           letterSpacing: '-0.01em',
         }}>
@@ -78,10 +78,10 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
           animate={{ rotate: open ? 45 : 0 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           style={{
-            width: 28,
-            height: 28,
+            width: 28, height: 28,
             borderRadius: '50%',
-            background: open ? '#FF5A00' : 'rgba(0,0,0,0.06)',
+            background: open ? '#ffffff' : 'rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.1)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -89,7 +89,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
           }}
         >
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M6 2v8M2 6h8" stroke={open ? '#ffffff' : '#0A0A0A'} strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M6 2v8M2 6h8" stroke={open ? '#0A0A0A' : '#ffffff'} strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
         </motion.div>
       </button>
@@ -107,7 +107,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
               fontFamily: 'Inter, sans-serif',
               fontSize: '0.9rem',
               lineHeight: 1.75,
-              color: '#888888',
+              color: '#666666',
               margin: '0 0 24px',
               paddingRight: 52,
             }}>
@@ -137,7 +137,6 @@ export default function FAQ() {
             alignItems: 'start',
           }}
         >
-          {/* Left */}
           <div style={{ position: 'sticky', top: 100 }}>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -215,7 +214,6 @@ export default function FAQ() {
             </motion.a>
           </div>
 
-          {/* Right: accordion */}
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
             {faqs.map((item, i) => (
               <FAQItem key={i} q={item.q} a={item.a} index={i} />
