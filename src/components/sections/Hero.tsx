@@ -178,7 +178,7 @@ export default function Hero() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingTop: 88,
+          paddingTop: 140,
           paddingBottom: 60,
         }}>
           {/* Pill label */}
