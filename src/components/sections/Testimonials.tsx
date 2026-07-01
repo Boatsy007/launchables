@@ -1,93 +1,120 @@
 'use client'
-
 import { motion } from 'framer-motion'
 
-const ACCENT = '#AAFF00'
-
-const testimonials = [
-  { quote: "Launchables built our website in 2 weeks and it ranked on page one. We've seen a 340% increase in organic traffic.", name: 'Sarah K.', role: 'Director, Apex Plumbing', initials: 'SK' },
-  { quote: "The best investment we've made. Our social media went from 200 to 15,000 followers in 90 days. Incredible results.", name: 'Marcus T.', role: 'Owner, Nova Coffee', initials: 'MT' },
-  { quote: "Honest, fast, and genuinely talented. Our rebrand drove a 3× increase in enquiries within the first month.", name: 'Emily R.', role: 'Owner, The Styling Room', initials: 'ER' },
-  { quote: "Their SEO work put us at #1 for our main keyword in 8 weeks. We've never had so many leads.", name: 'Tom B.', role: 'Director, Greenpath Landscaping', initials: 'TB' },
-  { quote: "From first call to live website in 3 weeks. The design blew me away. Customers constantly compliment how professional we look.", name: 'Priya M.', role: 'Founder, CleanPro Services', initials: 'PM' },
-  { quote: "We've worked with agencies that charge double and deliver a fraction of the quality. Launchables are genuinely world class.", name: 'James W.', role: 'CEO, Summit Health', initials: 'JW' },
+const TESTIMONIALS = [
+  {
+    quote: "They built our site in two weeks. It looked better than agencies that quoted us $30k. Ranked on page one within a month.",
+    name: 'Sarah K.',
+    co: 'Apex Plumbing, Sydney',
+  },
+  {
+    quote: "No meetings. No runaround. We gave them a brief, they came back with something extraordinary. Every time.",
+    name: 'Marcus T.',
+    co: 'Nova Coffee, Melbourne',
+  },
+  {
+    quote: "I've worked with four agencies. SSSHHH is the first one that actually delivered what they promised, on time.",
+    name: 'Emily R.',
+    co: 'The Styling Room, Brisbane',
+  },
+  {
+    quote: "Our social media went from 200 to 15,000 followers in 90 days. I don't know how they did it. I just know it worked.",
+    name: 'Tom B.',
+    co: 'Greenpath Landscaping',
+  },
+  {
+    quote: "The ROI on our website has been insane. We're booked out 6 weeks ahead and it's been 2 months.",
+    name: 'Chris M.',
+    co: 'Swept Services, QLD',
+  },
+  {
+    quote: "If you want someone to talk to you about brand strategy and digital journeys — call someone else. If you want results — call these guys.",
+    name: 'James W.',
+    co: 'Summit Health',
+  },
 ]
-
-function Stars() {
-  return (
-    <div style={{ display: 'flex', gap: 2, marginBottom: 16 }}>
-      {[...Array(5)].map((_, i) => (
-        <svg key={i} width="13" height="13" viewBox="0 0 13 13" fill={ACCENT}>
-          <path d="M6.5 1l1.3 2.8 3 .4-2.15 2.1.5 3L6.5 7.9 3.85 9.3l.5-3L2.2 4.2l3-.4z"/>
-        </svg>
-      ))}
-    </div>
-  )
-}
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" style={{ backgroundColor: '#0A0A0A', padding: 'clamp(72px, 8vw, 100px) clamp(24px, 5vw, 72px)' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+    <section id="testimonials" style={{ background: 'var(--bg)', padding: 'clamp(80px, 10vw, 120px) clamp(20px, 4vw, 48px)', borderTop: '1px solid var(--border)' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          style={{ marginBottom: 56 }}
+          style={{ marginBottom: 'clamp(40px, 6vw, 64px)' }}
         >
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', color: '#444', marginBottom: 14 }}>
-            Client Stories
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--muted)', marginBottom: 20 }}>
+            Clients
           </p>
-          <h2 style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontWeight: 800,
-            fontSize: 'clamp(2.5rem, 5vw, 5.5rem)',
-            lineHeight: 0.92,
-            letterSpacing: '-0.04em',
-            color: '#ffffff',
-            margin: 0,
-          }}>
-            Results our<br />clients love.
-          </h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 16 }}>
+            <h2 style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
+              letterSpacing: '-0.04em',
+              lineHeight: 0.95,
+              color: 'var(--text)',
+            }}>
+              The work<br />speaks.
+            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ display: 'flex' }}>
+                {['#2a2a2a','#323232','#3a3a3a','#424242'].map((c, i) => (
+                  <div key={i} style={{
+                    width: 28, height: 28, borderRadius: '50%',
+                    background: c, border: '2px solid var(--bg)',
+                    marginLeft: i === 0 ? 0 : -8,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 8, fontWeight: 600, color: 'var(--secondary)' }}>
+                      {['SK','MT','ER','TB'][i]}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', fontWeight: 500, color: 'var(--text)' }}>5.0</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: 'var(--muted)' }}>150+ clients</p>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          borderTop: '1px solid rgba(255,255,255,0.07)',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
+          gap: 'clamp(1px, 0.2vw, 1px)',
+          borderTop: '1px solid var(--border)',
+          borderLeft: '1px solid var(--border)',
         }}>
-          {testimonials.map((t, i) => (
+          {TESTIMONIALS.map((t, i) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: i * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: i * 0.07, duration: 0.6 }}
               style={{
-                padding: '36px 28px',
-                borderRight: (i + 1) % 3 !== 0 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                paddingLeft: i % 3 === 0 ? 0 : 28,
-                paddingRight: (i + 1) % 3 === 0 ? 0 : 28,
+                padding: 'clamp(24px, 3vw, 36px)',
+                borderRight: '1px solid var(--border)',
+                borderBottom: '1px solid var(--border)',
               }}
             >
-              <Stars />
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', lineHeight: 1.75, color: '#555555', margin: '0 0 24px' }}>
+              <p style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.9rem',
+                lineHeight: 1.75,
+                color: 'var(--secondary)',
+                marginBottom: 24,
+                fontStyle: 'italic',
+              }}>
                 "{t.quote}"
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: '50%',
-                  background: ACCENT,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}>
-                  <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: '0.7rem', color: '#0A0A0A' }}>{t.initials}</span>
-                </div>
-                <div>
-                  <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#ffffff', marginBottom: 2 }}>{t.name}</div>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#444444' }}>{t.role}</div>
-                </div>
+              <div>
+                <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: 2 }}>{t.name}</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'var(--muted)' }}>{t.co}</p>
               </div>
             </motion.div>
           ))}

@@ -1,230 +1,225 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence, useScroll } from 'framer-motion'
 
-const ACCENT = '#AAFF00'
+const NAV_LINKS = [
+  { label: 'Work',     href: '#portfolio' },
+  { label: 'Services', href: '#services'  },
+  { label: 'Pricing',  href: '#pricing'   },
+]
 
 const DRAWER_LINKS = [
-  { label: 'Website Design', href: '#services' },
-  { label: 'Social Media Management', href: '#services' },
-  { label: 'SEO & Growth', href: '#services' },
-  { label: 'Our Work', href: '#portfolio' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Contact Us', href: '#contact' },
+  { label: 'Our Work',              href: '#portfolio'    },
+  { label: 'Website Design',        href: '#services'     },
+  { label: 'Social Media',          href: '#services'     },
+  { label: 'Marketplace',           href: '#marketplace'  },
+  { label: 'Pricing',               href: '#pricing'      },
+  { label: 'Why SSSHHH',            href: '#why'          },
+  { label: 'FAQ',                   href: '#faq'          },
+  { label: 'Start a Project',       href: '#contact'      },
 ]
 
 export default function Nav() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [scrolled,   setScrolled]   = useState(false)
+  const { scrollY } = useScroll()
+
+  useEffect(() => {
+    return scrollY.on('change', v => setScrolled(v > 60))
+  }, [scrollY])
+
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [drawerOpen])
 
   return (
     <>
-      <nav style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 clamp(20px, 4vw, 48px)',
-        height: 68,
-        background: '#0A0A0A',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
-      }}>
-        <a href="/" style={{ textDecoration: 'none' }}>
-          <span style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontWeight: 800,
-            fontSize: '1.4rem',
-            color: '#ffffff',
-            letterSpacing: '-0.03em',
-          }}>
-            Limner<span style={{ color: ACCENT }}>.</span>
+      {/* ── Nav bar ── */}
+      <motion.header
+        style={{
+          position: 'fixed', top: 0, left: 0, right: 0,
+          zIndex: 80,
+          height: 60,
+          display: 'flex', alignItems: 'center',
+          padding: '0 clamp(20px, 4vw, 48px)',
+          transition: 'background 0.4s ease, border-color 0.4s ease',
+          background: scrolled ? 'rgba(9,9,9,0.92)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(20px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+          borderBottom: `1px solid ${scrolled ? 'rgba(255,255,255,0.07)' : 'transparent'}`,
+        }}
+      >
+        {/* Logo */}
+        <a href="/" aria-label="SSSHHH — home" style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 800, fontSize: '1.4rem', color: 'var(--text)', letterSpacing: '-0.03em' }}>
+            SSSHHH<span style={{ color: 'var(--muted)' }}>.</span>
           </span>
         </a>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+        {/* Desktop links */}
+        <nav className="hidden md:flex" style={{ alignItems: 'center', gap: 2 }}>
+          {NAV_LINKS.map(link => (
+            <a
+              key={link.label}
+              href={link.href}
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.875rem',
+                fontWeight: 400,
+                color: 'var(--secondary)',
+                padding: '6px 14px',
+                borderRadius: 6,
+                transition: 'color 0.2s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--secondary)')}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* CTA + Menu */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, justifyContent: 'flex-end' }}>
           <a
             href="#contact"
-            className="hidden md:block"
+            className="hidden md:inline-flex"
             style={{
+              alignItems: 'center',
               fontFamily: 'Inter, sans-serif',
               fontSize: '0.875rem',
-              color: 'rgba(255,255,255,0.5)',
-              textDecoration: 'none',
-              transition: 'color 0.2s',
+              fontWeight: 500,
+              color: 'var(--text)',
+              padding: '7px 18px',
+              border: '1px solid var(--border-lg)',
+              borderRadius: 8,
+              transition: 'background 0.25s ease, border-color 0.25s ease, color 0.25s ease',
             }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)')}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'var(--text)'
+              e.currentTarget.style.color = 'var(--bg)'
+              e.currentTarget.style.borderColor = 'var(--text)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'transparent'
+              e.currentTarget.style.color = 'var(--text)'
+              e.currentTarget.style.borderColor = 'var(--border-lg)'
+            }}
           >
-            Contact the Limner Team
+            Start Project
           </a>
+
           <button
-            onClick={() => setMenuOpen(true)}
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open menu"
             style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 10,
-              fontFamily: 'Inter, sans-serif', fontSize: '0.875rem',
-              color: '#ffffff', padding: 0,
+              display: 'flex', flexDirection: 'column', gap: 5,
+              width: 32, height: 32,
+              justifyContent: 'center', alignItems: 'center',
+              background: 'none', border: 'none',
+              color: 'var(--secondary)',
             }}
           >
-            Menu
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 5, width: 18 }}>
-              <span style={{ display: 'block', height: 1.5, background: '#ffffff', borderRadius: 1 }} />
-              <span style={{ display: 'block', height: 1.5, background: '#ffffff', borderRadius: 1 }} />
-            </div>
+            <span style={{ display: 'block', width: 20, height: 1, background: 'var(--secondary)', transition: 'width 0.2s' }} />
+            <span style={{ display: 'block', width: 14, height: 1, background: 'var(--secondary)' }} />
           </button>
         </div>
-      </nav>
+      </motion.header>
 
+      {/* ── Backdrop ── */}
       <AnimatePresence>
-        {menuOpen && (
+        {drawerOpen && (
           <motion.div
             key="backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            onClick={() => setMenuOpen(false)}
-            style={{
-              position: 'fixed', inset: 0, zIndex: 200,
-              background: 'rgba(0,0,0,0.6)',
-              backdropFilter: 'blur(2px)',
-            }}
+            onClick={() => setDrawerOpen(false)}
+            style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}
           />
         )}
       </AnimatePresence>
 
+      {/* ── Side drawer ── */}
       <AnimatePresence>
-        {menuOpen && (
+        {drawerOpen && (
           <motion.div
             key="drawer"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ type: 'tween', duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
             style={{
               position: 'fixed', top: 0, right: 0, bottom: 0,
-              width: 'min(400px, 90vw)',
-              background: '#111111',
-              zIndex: 201,
+              width: 'min(380px, 92vw)',
+              background: 'var(--surface)',
+              borderLeft: '1px solid var(--border)',
+              zIndex: 90,
               display: 'flex', flexDirection: 'column',
-              padding: '24px 36px 40px',
+              padding: '0 0 40px',
               overflowY: 'auto',
             }}
           >
+            {/* Drawer header */}
             <div style={{
-              display: 'flex', alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 52,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '18px 28px',
+              borderBottom: '1px solid var(--border)',
+              height: 60,
             }}>
-              <span style={{
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontWeight: 800, fontSize: '1.2rem',
-                color: '#ffffff', letterSpacing: '-0.02em',
-              }}>
-                Limner<span style={{ color: ACCENT }}>.</span>
-              </span>
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 800, fontSize: '1.3rem', color: 'var(--text)', letterSpacing: '-0.03em' }}>SSSHHH<span style={{ color: 'var(--muted)' }}>.</span></span>
               <button
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  color: 'rgba(255,255,255,0.6)', padding: 4,
-                  display: 'flex', alignItems: 'center', gap: 8,
-                  fontFamily: 'Inter, sans-serif', fontSize: '0.875rem',
-                }}
+                onClick={() => setDrawerOpen(false)}
+                aria-label="Close menu"
+                style={{ background: 'none', border: 'none', color: 'var(--muted)', padding: 4, lineHeight: 0 }}
               >
-                Menu
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M2 2l14 14M16 2L2 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
               </button>
             </div>
 
-            <div style={{ flex: 1 }}>
+            {/* Links */}
+            <nav style={{ flex: 1, padding: '12px 0' }}>
               {DRAWER_LINKS.map((link, i) => (
                 <motion.a
                   key={link.label}
                   href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  initial={{ opacity: 0, x: 24 }}
+                  onClick={() => setDrawerOpen(false)}
+                  initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.04 + 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ delay: i * 0.035 + 0.05, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    fontFamily: 'Space Grotesk, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '1.05rem',
-                    color: '#ffffff',
-                    textDecoration: 'none',
-                    padding: '16px 0',
-                    borderBottom: '1px solid rgba(255,255,255,0.07)',
+                    padding: '16px 28px',
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '1rem',
+                    fontWeight: 400,
+                    color: link.label === 'Start a Project' ? 'var(--text)' : 'var(--secondary)',
+                    borderBottom: '1px solid var(--border)',
                     transition: 'color 0.2s',
                   }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = ACCENT)}
-                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = link.label === 'Start a Project' ? 'var(--text)' : 'var(--secondary)')}
                 >
                   {link.label}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ opacity: 0.3 }}>
-                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style={{ opacity: 0.3 }}>
+                    <path d="M2 6.5h9M7.5 3l3.5 3.5L7.5 10" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </motion.a>
               ))}
+            </nav>
+
+            {/* Drawer footer */}
+            <div style={{ padding: '24px 28px 0', borderTop: '1px solid var(--border)' }}>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'var(--muted)', marginBottom: 6 }}>
+                hello@ssshhh.com.au
+              </p>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'var(--muted)' }}>
+                Australia-wide
+              </p>
             </div>
-
-            <motion.a
-              href="#portfolio"
-              onClick={() => setMenuOpen(false)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.4 }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '10px 22px',
-                border: '1px solid rgba(255,255,255,0.25)',
-                borderRadius: '9999px',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.85rem',
-                fontWeight: 500,
-                color: '#ffffff',
-                textDecoration: 'none',
-                margin: '28px 0',
-                alignSelf: 'flex-start',
-                transition: 'border-color 0.2s, color 0.2s',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLElement
-                el.style.borderColor = ACCENT
-                el.style.color = ACCENT
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLElement
-                el.style.borderColor = 'rgba(255,255,255,0.25)'
-                el.style.color = '#ffffff'
-              }}
-            >
-              View Our Work
-            </motion.a>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-                </svg>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)' }}>
-                  hello@launchables.com.au
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
-                </svg>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)' }}>
-                  Australia-wide
-                </span>
-              </div>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

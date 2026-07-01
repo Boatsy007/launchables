@@ -1,62 +1,59 @@
 'use client'
-
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { Check } from 'lucide-react'
 
-const plans = [
+const PLANS = [
   {
-    name: 'Website Design',
+    name: 'Website',
     price: 'From $2,500',
     period: 'one-time',
-    description: 'A premium custom website designed to convert visitors into customers.',
+    line: 'A fast, converting website. Built properly. Built once.',
     features: [
-      'Custom design (no templates)',
+      'Custom design — no templates',
       'Mobile-first & responsive',
       'Up to 10 pages',
       'SEO optimised',
-      'Contact forms & CTA setup',
-      'Google Analytics integration',
-      'CMS for easy updates',
+      'CMS for self-editing',
+      'Google Analytics',
       '30-day post-launch support',
     ],
-    cta: 'Enquire Now',
+    cta: 'Enquire',
     featured: false,
   },
   {
-    name: 'Website + Social Media',
+    name: 'Website + Social',
     price: 'From $1,500',
     period: 'per month',
-    description: 'Everything you need to dominate online — a beautiful website plus active social media management.',
+    line: 'The full picture. Website plus consistent social presence that compounds.',
     features: [
-      'Everything in Website Design',
-      'Social media content creation',
-      'Daily posting (3–5 platforms)',
-      'Growth strategy & planning',
-      'Professional photography',
+      'Everything in Website',
+      'Social content creation',
+      'Daily posting, 3–5 platforms',
+      'Growth strategy',
       'Community management',
       'Monthly performance reports',
       'Priority support',
     ],
     cta: 'Get Started',
     featured: true,
-    badge: 'Most Popular',
+    badge: 'Most popular',
   },
   {
-    name: 'Social Media Management',
+    name: 'Social Media',
     price: 'From $800',
     period: 'per month',
-    description: 'Full-service social media management that grows your audience and drives real engagement.',
+    line: 'Your social, handled. Content created, posted, managed.',
     features: [
-      'Content creation & copywriting',
-      'Daily posting (2–3 platforms)',
-      'Growth & engagement strategy',
-      'Story & reel creation',
+      'Content creation & copy',
+      'Daily posting, 2–3 platforms',
+      'Growth strategy',
+      'Reels & stories',
       'Community management',
-      'Paid advertising (optional)',
       'Monthly performance reports',
       'Dedicated account manager',
     ],
-    cta: 'Enquire Now',
+    cta: 'Enquire',
     featured: false,
   },
 ]
@@ -66,194 +63,137 @@ export default function Pricing() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="pricing" style={{ backgroundColor: '#ffffff', padding: 'clamp(80px, 10vw, 120px) 0' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
-
-        <div ref={ref} style={{ marginBottom: 72 }}>
+    <section id="pricing" style={{ background: 'var(--bg)', padding: 'clamp(80px, 10vw, 120px) clamp(20px, 4vw, 48px)', borderTop: '1px solid var(--border)' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div ref={ref} style={{ marginBottom: 'clamp(48px, 6vw, 72px)' }}>
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '0.7rem',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.2em',
-              color: '#AAAAAA',
-              marginBottom: 16,
-            }}
+            transition={{ duration: 0.6 }}
+            style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--muted)', marginBottom: 20 }}
           >
             Pricing
           </motion.p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24 }}>
-            <motion.h2
-              initial={{ opacity: 0, y: 24 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              style={{
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontWeight: 700,
-                fontSize: 'clamp(2rem, 4vw, 3.5rem)',
-                letterSpacing: '-0.03em',
-                lineHeight: 1.05,
-                color: '#0A0A0A',
-                margin: 0,
-              }}
-            >
-              Clear, honest pricing.
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.25, duration: 0.6 }}
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.9rem',
-                color: '#888888',
-                maxWidth: 320,
-                margin: 0,
-                lineHeight: 1.6,
-              }}
-            >
-              No hidden fees. No lock-in contracts. Enquire and we'll tailor a package to your needs.
-            </motion.p>
-          </div>
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
+              letterSpacing: '-0.04em',
+              lineHeight: 0.95,
+              color: 'var(--text)',
+              margin: 0,
+            }}
+          >
+            Simple.<br />Honest.
+          </motion.h2>
         </div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          borderTop: '1px solid rgba(0,0,0,0.08)',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
+          gap: 'clamp(16px, 2vw, 20px)',
         }}>
-          {plans.map((plan, i) => (
+          {PLANS.map((plan, i) => (
             <motion.div
               key={plan.name}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               style={{
-                padding: '48px 32px',
-                borderRight: i < 2 ? '1px solid rgba(0,0,0,0.08)' : 'none',
-                paddingLeft: i === 0 ? 0 : 32,
-                paddingRight: i === 2 ? 0 : 32,
-                position: 'relative',
-                background: plan.featured ? '#0A0A0A' : 'transparent',
+                background: plan.featured ? 'var(--surface)' : 'transparent',
+                border: `1px solid ${plan.featured ? 'rgba(255,255,255,0.14)' : 'var(--border)'}`,
+                borderRadius: 12,
+                padding: 'clamp(24px, 3vw, 36px)',
                 display: 'flex',
                 flexDirection: 'column',
+                position: 'relative',
               }}
             >
               {plan.badge && (
-                <div style={{
-                  position: 'absolute',
-                  top: 20,
-                  right: i === 2 ? 0 : 32,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: '4px 10px',
-                  background: '#AAFF00',
-                  borderRadius: '9999px',
+                <span style={{
+                  position: 'absolute', top: -1, right: 24,
                   fontFamily: 'Inter, sans-serif',
-                  fontSize: '0.65rem',
-                  fontWeight: 700,
-                  color: '#0A0A0A',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
+                  fontSize: '0.68rem',
+                  fontWeight: 500,
+                  color: 'var(--bg)',
+                  background: 'var(--text)',
+                  padding: '3px 10px',
+                  borderRadius: '0 0 6px 6px',
+                  letterSpacing: '0.05em',
                 }}>
                   {plan.badge}
-                </div>
+                </span>
               )}
 
-              <div style={{ marginBottom: 32 }}>
-                <p style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '0.72rem',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.15em',
-                  color: plan.featured ? '#555555' : '#AAAAAA',
-                  marginBottom: 20,
-                }}>
+              <div style={{ marginBottom: 28 }}>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--muted)', marginBottom: 20 }}>
                   {plan.name}
                 </p>
-
                 <div style={{
                   fontFamily: 'Space Grotesk, sans-serif',
                   fontWeight: 700,
                   fontSize: 'clamp(1.8rem, 2.5vw, 2.4rem)',
-                  color: plan.featured ? '#ffffff' : '#0A0A0A',
+                  color: 'var(--text)',
+                  letterSpacing: '-0.03em',
                   lineHeight: 1,
-                  marginBottom: 6,
-                  letterSpacing: '-0.02em',
+                  marginBottom: 4,
                 }}>
                   {plan.price}
                 </div>
-                <div style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '0.8rem',
-                  color: plan.featured ? '#555555' : '#AAAAAA',
-                  marginBottom: 20,
-                }}>
+                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'var(--muted)', marginBottom: 16 }}>
                   {plan.period}
                 </div>
-                <p style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '0.85rem',
-                  lineHeight: 1.65,
-                  color: plan.featured ? '#666666' : '#888888',
-                  margin: 0,
-                }}>
-                  {plan.description}
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', lineHeight: 1.65, color: 'var(--secondary)' }}>
+                  {plan.line}
                 </p>
               </div>
 
-              <div style={{ width: '100%', height: 1, background: plan.featured ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)', marginBottom: 28 }} />
+              <div style={{ height: 1, background: 'var(--border)', marginBottom: 24 }} />
 
-              <ul style={{ listStyle: 'none', margin: '0 0 36px', padding: 0, display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
-                {plan.features.map((f) => (
-                  <li key={f} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '0.83rem',
-                    color: plan.featured ? '#888888' : '#666666',
-                  }}>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
-                      <path d="M2 6l3 3 5-6" stroke={plan.featured ? '#ffffff' : '#0A0A0A'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    {f}
+              <ul style={{ listStyle: 'none', flex: 1, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
+                {plan.features.map(f => (
+                  <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                    <Check size={13} style={{ color: 'var(--secondary)', flexShrink: 0, marginTop: 3 }} />
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'var(--secondary)', lineHeight: 1.5 }}>{f}</span>
                   </li>
                 ))}
               </ul>
 
-              <motion.a
+              <a
                 href="#contact"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: 6,
-                  padding: '13px 24px',
-                  borderRadius: '9999px',
-                  fontSize: '0.88rem',
-                  fontWeight: 600,
+                  padding: '11px 20px',
+                  border: '1px solid',
+                  borderColor: plan.featured ? 'rgba(255,255,255,0.25)' : 'var(--border)',
+                  borderRadius: 8,
                   fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  color: 'var(--text)',
                   textDecoration: 'none',
-                  border: plan.featured ? 'none' : '1px solid rgba(0,0,0,0.15)',
-                  background: plan.featured ? '#ffffff' : 'transparent',
-                  color: plan.featured ? '#0A0A0A' : '#0A0A0A',
-                  letterSpacing: '-0.01em',
+                  transition: 'background 0.25s ease, color 0.25s ease, border-color 0.25s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--text)'
+                  e.currentTarget.style.color = 'var(--bg)'
+                  e.currentTarget.style.borderColor = 'var(--text)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'transparent'
+                  e.currentTarget.style.color = 'var(--text)'
+                  e.currentTarget.style.borderColor = plan.featured ? 'rgba(255,255,255,0.25)' : 'var(--border)'
                 }}
               >
                 {plan.cta}
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </motion.a>
+              </a>
             </motion.div>
           ))}
         </div>
@@ -262,16 +202,10 @@ export default function Pricing() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '0.8rem',
-            color: '#BBBBBB',
-            marginTop: 40,
-            textAlign: 'center',
-          }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'var(--muted)', marginTop: 32, textAlign: 'center' }}
         >
-          All prices are in AUD. Custom packages available — just ask.
+          All prices AUD. No lock-in contracts. Custom packages available.
         </motion.p>
       </div>
     </section>

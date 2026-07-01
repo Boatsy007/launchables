@@ -1,382 +1,237 @@
 'use client'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
-import { useState, useRef } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-
-const FILTERS = ['All', 'Trades', 'Hospitality', 'Services', 'Health', 'Commercial']
-
-const projects = [
+const PROJECTS = [
   {
+    id: 'swept',
     name: 'Swept Services',
     category: 'Commercial',
-    result: 'Booked solid, 6 weeks post-launch',
-    bg: 'linear-gradient(140deg, #0d1929 0%, #091420 100%)',
-    accent: '#2BAEF5',
-    textAccent: '#2BAEF5',
-    headline: 'Commercial sweeping done right.',
-    swept: true,
+    year: '2024',
+    result: 'Booked solid 6 weeks post-launch',
+    description: 'Complete website redesign for a commercial sweeping company in South East Queensland.',
+    bg: '#0c131f',
+    accent: '#3b7fcf',
   },
   {
+    id: 'apex',
     name: 'Apex Plumbing',
     category: 'Trades',
+    year: '2024',
     result: '+340% organic traffic',
-    bg: 'linear-gradient(140deg, #0a1628 0%, #071020 100%)',
-    accent: '#2563EB',
-    textAccent: '#60A5FA',
-    headline: 'Your local plumber.',
+    description: 'Full website and local SEO for a Sydney-based plumbing company.',
+    bg: '#0f0f12',
+    accent: '#8888aa',
   },
   {
+    id: 'nova',
     name: 'Nova Coffee',
     category: 'Hospitality',
+    year: '2023',
     result: '15K followers in 90 days',
-    bg: 'linear-gradient(140deg, #1a0c04 0%, #0d0603 100%)',
-    accent: '#D97706',
-    textAccent: '#FCD34D',
-    headline: 'Every cup, a story.',
+    description: 'Brand identity, website and social media management for a Melbourne café.',
+    bg: '#140e08',
+    accent: '#9a7040',
   },
   {
-    name: 'The Styling Room',
-    category: 'Services',
-    result: '3× more enquiries',
-    bg: 'linear-gradient(140deg, #1a0a14 0%, #0d0509 100%)',
-    accent: '#DB2777',
-    textAccent: '#F472B6',
-    headline: 'Beauty on your terms.',
-  },
-  {
-    name: 'Greenpath',
-    category: 'Services',
-    result: '#1 Google ranking, 8 weeks',
-    bg: 'linear-gradient(140deg, #061a0c 0%, #030d06 100%)',
-    accent: '#16A34A',
-    textAccent: '#4ADE80',
-    headline: 'Gardens that last.',
-  },
-  {
-    name: 'CleanPro Services',
-    category: 'Services',
-    result: 'Launched in 3 weeks',
-    bg: 'linear-gradient(140deg, #041a24 0%, #020e14 100%)',
-    accent: '#0284C7',
-    textAccent: '#38BDF8',
-    headline: 'Spotless. Every time.',
-  },
-  {
+    id: 'summit',
     name: 'Summit Health',
     category: 'Health',
-    result: '200+ new patients, month one',
-    bg: 'linear-gradient(140deg, #130a24 0%, #0a0514 100%)',
-    accent: '#7C3AED',
-    textAccent: '#A78BFA',
-    headline: 'Your health. Optimised.',
+    year: '2024',
+    result: '200+ new patients in month one',
+    description: 'Complete digital presence for a health clinic — website, SEO, Google Ads.',
+    bg: '#0e0c14',
+    accent: '#7060a0',
+  },
+  {
+    id: 'greenpath',
+    name: 'Greenpath Landscaping',
+    category: 'Services',
+    year: '2023',
+    result: '#1 Google ranking in 8 weeks',
+    description: 'Website and SEO campaign that took a landscaping company to the top of search.',
+    bg: '#0a120c',
+    accent: '#407050',
+  },
+  {
+    id: 'styling',
+    name: 'The Styling Room',
+    category: 'Beauty',
+    year: '2024',
+    result: '3× more enquiries',
+    description: 'Elegant website redesign and social media management for a Brisbane hair salon.',
+    bg: '#140a10',
+    accent: '#9a5070',
   },
 ]
 
-type Project = {
-  name: string
-  category: string
-  result: string
-  bg: string
-  accent: string
-  textAccent: string
-  headline: string
-  swept?: boolean
-}
-
-function SweptPreview({ accent }: { accent: string }) {
-  return (
-    <div style={{ width: '100%', height: '100%', background: '#0d1929', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
-      {/* Nav */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 13, color: '#ffffff' }}>Swept</span>
-          <span style={{ width: 5, height: 5, borderRadius: '50%', background: accent, display: 'inline-block', marginBottom: 2 }} />
-        </div>
-        <div style={{ display: 'flex', gap: 14 }}>
-          {['Services', 'Industries', 'Equipment', 'Gallery'].map(l => (
-            <span key={l} style={{ fontFamily: 'Inter, sans-serif', fontSize: 9.5, color: 'rgba(255,255,255,0.38)' }}>{l}</span>
-          ))}
-        </div>
-        <div style={{ background: accent, color: '#fff', fontSize: 9, fontWeight: 700, fontFamily: 'Inter, sans-serif', padding: '4px 10px', borderRadius: 4 }}>Get a Quote</div>
-      </div>
-      {/* Hero */}
-      <div style={{ flex: 1, padding: '20px 20px', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(13,25,41,0.95) 50%, rgba(13,25,41,0.4) 100%)' }} />
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 8, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent, marginBottom: 8 }}>
-            Commercial Sweeping — South East Queensland
-          </p>
-          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 800, fontSize: 19, color: '#ffffff', lineHeight: 1.1, marginBottom: 10 }}>
-            COMMERCIAL<br />SWEEPING<br />DONE <span style={{ color: accent }}>RIGHT.</span>
-          </div>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.45)', lineHeight: 1.5, maxWidth: 180 }}>
-            Professional commercial sweeping across South East Queensland.
-          </p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({ p, i }: { p: typeof PROJECTS[0]; i: number }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ delay: i * 0.07, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      style={{
-        position: 'relative',
+      style={{ position: 'relative' }}
+    >
+      {/* Visual */}
+      <div style={{
+        background: p.bg,
+        border: '1px solid var(--border)',
         borderRadius: 12,
         overflow: 'hidden',
-        cursor: 'pointer',
-        border: '1px solid rgba(255,255,255,0.05)',
-      }}
-    >
-      <motion.div
-        animate={{ scale: hovered ? 1.03 : 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        style={{
-          background: project.bg,
-          padding: project.swept ? 0 : '28px 24px 24px',
-          aspectRatio: '16/9',
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {project.swept ? (
-          <SweptPreview accent={project.accent} />
-        ) : (
-          <>
-            <div style={{
-              position: 'absolute', top: -20, right: -20,
-              width: 180, height: 180,
-              background: `radial-gradient(circle, ${project.accent}22 0%, transparent 70%)`,
-              pointerEvents: 'none',
-            }} />
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, position: 'relative', zIndex: 2 }}>
-              <div style={{ width: 60, height: 7, background: 'rgba(255,255,255,0.15)', borderRadius: 3 }} />
-              <div style={{ display: 'flex', gap: 12 }}>
-                {[40, 35, 45].map((w, j) => <div key={j} style={{ width: w, height: 5, background: 'rgba(255,255,255,0.08)', borderRadius: 2 }} />)}
-              </div>
-              <div style={{ width: 56, height: 22, background: project.accent, borderRadius: 4 }} />
-            </div>
-
-            <div style={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 18, color: project.textAccent, marginBottom: 8, lineHeight: 1.2 }}>
-                {project.headline}
-              </div>
-              <div style={{ width: '65%', height: 7, background: 'rgba(255,255,255,0.1)', borderRadius: 3, marginBottom: 5 }} />
-              <div style={{ width: '45%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 3, marginBottom: 18 }} />
-              <div style={{ display: 'flex', gap: 8 }}>
-                <div style={{ width: 72, height: 26, background: project.accent, borderRadius: 4 }} />
-                <div style={{ width: 72, height: 26, background: 'rgba(255,255,255,0.06)', borderRadius: 4, border: '1px solid rgba(255,255,255,0.1)' }} />
-              </div>
-            </div>
-          </>
-        )}
-      </motion.div>
-
-      {/* Card footer */}
-      <div style={{
-        background: '#111111',
-        padding: '16px 20px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
+        aspectRatio: '16/10',
+        position: 'relative',
+        marginBottom: 20,
       }}>
-        <div>
-          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: '#ffffff', marginBottom: 3 }}>
-            {project.name}
+        {/* Minimal site preview */}
+        <motion.div
+          animate={{ scale: hovered ? 1.02 : 1 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          style={{ width: '100%', height: '100%', padding: '20px 22px', display: 'flex', flexDirection: 'column' }}
+        >
+          {/* Fake nav */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, paddingBottom: 14, borderBottom: `1px solid rgba(255,255,255,0.05)` }}>
+            <div style={{ width: 48, height: 5, background: 'rgba(255,255,255,0.15)', borderRadius: 2 }} />
+            <div style={{ display: 'flex', gap: 10 }}>
+              {[32, 28, 36].map((w, j) => <div key={j} style={{ width: w, height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 2 }} />)}
+            </div>
           </div>
-          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: '#444444' }}>
-            {project.category}
+          {/* Headline lines */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10 }}>
+            <div style={{ width: '65%', height: 11, background: `rgba(${parseInt(p.accent.slice(1,3),16)},${parseInt(p.accent.slice(3,5),16)},${parseInt(p.accent.slice(5,7),16)},0.7)`, borderRadius: 3 }} />
+            <div style={{ width: '50%', height: 7, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} />
+            <div style={{ width: '40%', height: 7, background: 'rgba(255,255,255,0.07)', borderRadius: 2 }} />
+            <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+              <div style={{ width: 64, height: 22, background: `rgba(${parseInt(p.accent.slice(1,3),16)},${parseInt(p.accent.slice(3,5),16)},${parseInt(p.accent.slice(5,7),16)},0.5)`, borderRadius: 4 }} />
+              <div style={{ width: 64, height: 22, background: 'rgba(255,255,255,0.04)', borderRadius: 4, border: '1px solid rgba(255,255,255,0.07)' }} />
+            </div>
           </div>
-        </div>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 5,
-          padding: '5px 10px',
-          background: 'rgba(255,255,255,0.06)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 20,
-        }}>
-          <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
-            <path d="M1 6l2-2 2 2 3-5" stroke="rgba(255,255,255,0.6)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.6)' }}>
-            {project.result}
-          </span>
-        </div>
+        </motion.div>
+
+        {/* Hover overlay */}
+        <AnimatePresence>
+          {hovered && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                position: 'absolute', inset: 0,
+                background: 'rgba(0,0,0,0.5)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              <div style={{
+                padding: '10px 24px',
+                border: '1px solid rgba(247,247,245,0.3)',
+                borderRadius: 8,
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.85rem',
+                fontWeight: 400,
+                color: 'var(--text)',
+              }}>
+                View Project
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Hover overlay */}
-      <motion.div
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.2 }}
-        style={{
-          position: 'absolute', inset: 0,
-          background: 'rgba(0,0,0,0.35)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          pointerEvents: 'none',
-          zIndex: 10,
-        }}
-      >
-        <div style={{
-          width: 48, height: 48,
-          borderRadius: '50%',
-          background: '#ffffff',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M3 9h12M9 4l5 5-5 5" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+      {/* Caption */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
+        <div>
+          <h3 style={{
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontWeight: 600,
+            fontSize: '1rem',
+            color: 'var(--text)',
+            letterSpacing: '-0.02em',
+            marginBottom: 4,
+          }}>
+            {p.name}
+          </h3>
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.82rem',
+            color: 'var(--muted)',
+          }}>
+            {p.category} · {p.year}
+          </p>
         </div>
-      </motion.div>
-    </motion.div>
+        <p style={{
+          fontFamily: 'Inter, sans-serif',
+          fontSize: '0.82rem',
+          color: 'var(--secondary)',
+          textAlign: 'right',
+          lineHeight: 1.5,
+          maxWidth: 160,
+        }}>
+          {p.result}
+        </p>
+      </div>
+    </motion.article>
   )
 }
 
 export default function Portfolio() {
-  const [active, setActive] = useState('All')
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-
-  const filtered = active === 'All' ? projects : projects.filter(p => p.category === active)
-
   return (
-    <section id="portfolio" style={{ backgroundColor: '#0A0A0A', padding: 'clamp(80px, 10vw, 120px) 0' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
-
-        <div ref={ref} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24, marginBottom: 48 }}>
-          <div>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5 }}
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.7rem',
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.2em',
-                color: '#444444',
-                marginBottom: 14,
-              }}
-            >
-              Our Work
-            </motion.p>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              style={{
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontWeight: 700,
-                fontSize: 'clamp(2rem, 4vw, 3.5rem)',
-                letterSpacing: '-0.03em',
-                lineHeight: 1.05,
-                color: '#ffffff',
-                margin: 0,
-              }}
-            >
-              Websites that get results.
-            </motion.h2>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.25, duration: 0.5 }}
-            style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
-          >
-            {FILTERS.map(f => (
-              <button
-                key={f}
-                onClick={() => setActive(f)}
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: '9999px',
-                  fontSize: '0.8rem',
-                  fontWeight: 500,
-                  fontFamily: 'Inter, sans-serif',
-                  cursor: 'pointer',
-                  border: '1px solid',
-                  transition: 'all 0.2s ease',
-                  borderColor: active === f ? '#AAFF00' : 'rgba(255,255,255,0.1)',
-                  background: active === f ? '#AAFF00' : 'transparent',
-                  color: '#0A0A0A',
-                }}
-              >
-                {f}
-              </button>
-            ))}
-          </motion.div>
-        </div>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-              gap: 20,
-            }}
-          >
-            {filtered.map((p, i) => (
-              <ProjectCard key={p.name} project={p} index={i} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-
+    <section id="portfolio" style={{ background: 'var(--bg)', padding: 'clamp(80px, 10vw, 120px) clamp(20px, 4vw, 48px)' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          style={{ textAlign: 'center', marginTop: 56 }}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+            flexWrap: 'wrap', gap: 24,
+            marginBottom: 'clamp(40px, 6vw, 64px)',
+          }}
         >
-          <motion.a
+          <div>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--muted)', marginBottom: 20 }}>
+              Featured Work
+            </p>
+            <h2 style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
+              letterSpacing: '-0.04em',
+              lineHeight: 0.95,
+              color: 'var(--text)',
+            }}>
+              Work that<br />gets results
+            </h2>
+          </div>
+          <a
             href="#contact"
-            whileHover={{ scale: 1.03, backgroundColor: '#eeeeee' }}
-            whileTap={{ scale: 0.98 }}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '14px 32px',
-              borderRadius: '9999px',
-              background: '#ffffff',
-              color: '#0A0A0A',
-              textDecoration: 'none',
               fontFamily: 'Inter, sans-serif',
-              fontSize: '0.9rem',
-              fontWeight: 600,
-              letterSpacing: '-0.01em',
-              transition: 'background 0.2s ease',
+              fontSize: '0.875rem',
+              color: 'var(--muted)',
+              padding: '8px 0',
+              transition: 'color 0.2s',
             }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
           >
-            Start Your Project
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </motion.a>
+            Start your project →
+          </a>
         </motion.div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))',
+          gap: 'clamp(24px, 3vw, 36px)',
+        }}>
+          {PROJECTS.map((p, i) => <ProjectCard key={p.id} p={p} i={i} />)}
+        </div>
       </div>
     </section>
   )

@@ -1,80 +1,61 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --black:   #0A0A0A;
-  --white:   #FFFFFF;
-  --accent:  #AAFF00;
+  --bg:         #090909;
+  --surface:    #111111;
+  --border:     rgba(255, 255, 255, 0.08);
+  --border-lg:  rgba(255, 255, 255, 0.12);
+  --text:       #F7F7F5;
+  --secondary:  #9A9A9A;
+  --muted:      #6B6B6B;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
   overflow-x: hidden;
-  background-color: #0A0A0A;
-  color: #0A0A0A;
-}
-
-::selection {
-  background: #AAFF00;
-  color: #0A0A0A;
-}
-
-::-webkit-scrollbar {
-  width: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 2px;
-}
-
-* { scrollbar-width: thin; scrollbar-color: #333 transparent; }
-
-:focus-visible {
-  outline: 2px solid #AAFF00;
-  outline-offset: 3px;
+  cursor: default;
 }
 
 body:not(.loaded) #root {
   opacity: 0;
 }
-
 body.loaded #root {
   opacity: 1;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.5s ease;
 }
 
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+::selection {
+  background: var(--text);
+  color: var(--bg);
 }
 
-.cursor-blink {
-  animation: blink 1s step-end infinite;
-}
+::-webkit-scrollbar { width: 0; }
 
-@keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+img, video { display: block; max-width: 100%; }
 
-.ticker-track {
-  animation: ticker 28s linear infinite;
-}
-
-.ticker-track:hover {
-  animation-play-state: paused;
+/* Utility */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
