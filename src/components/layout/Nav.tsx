@@ -1,297 +1,230 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence, useScroll } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const NAV_LINKS = [
-  { label: 'Work',     href: '#portfolio' },
-  { label: 'Services', href: '#services'  },
-  { label: 'Pricing',  href: '#pricing'   },
-  { label: 'About',    href: '#why'       },
+const ACCENT = '#AAFF00'
+
+const DRAWER_LINKS = [
+  { label: 'Website Design', href: '#services' },
+  { label: 'Social Media Management', href: '#services' },
+  { label: 'SEO & Growth', href: '#services' },
+  { label: 'Our Work', href: '#portfolio' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'FAQ', href: '#faq' },
+  { label: 'Contact Us', href: '#contact' },
 ]
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const { scrollY } = useScroll()
-
-  useEffect(() => {
-    return scrollY.on('change', (v) => setScrolled(v > 80))
-  }, [scrollY])
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [menuOpen])
 
   return (
     <>
-      {/* ── Logo — always pinned top-left ── */}
-      <motion.a
-        href="/"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.8 }}
-        style={{
-          position: 'fixed',
-          top: 24,
-          left: 32,
-          zIndex: 60,
-          textDecoration: 'none',
-          display: 'block',
-        }}
-      >
-        <img
-          src="/logo.png"
-          alt="Limner"
-          style={{
-            height: 90,
-            width: 'auto',
-            display: 'block',
-            userSelect: 'none',
-          }}
-          draggable={false}
-        />
-      </motion.a>
+      <nav style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 clamp(20px, 4vw, 48px)',
+        height: 68,
+        background: '#0A0A0A',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+      }}>
+        <a href="/" style={{ textDecoration: 'none' }}>
+          <span style={{
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontWeight: 800,
+            fontSize: '1.4rem',
+            color: '#ffffff',
+            letterSpacing: '-0.03em',
+          }}>
+            Limner<span style={{ color: ACCENT }}>.</span>
+          </span>
+        </a>
 
-      {/* ── Top nav — visible before scroll, hides on scroll ── */}
-      <AnimatePresence>
-        {!scrolled && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+          <a
+            href="#contact"
+            className="hidden md:block"
             style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              zIndex: 50,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              height: 72,
-              padding: '0 32px',
-              gap: 4,
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.875rem',
+              color: 'rgba(255,255,255,0.5)',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+            }}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)')}
+          >
+            Contact the Limner Team
+          </a>
+          <button
+            onClick={() => setMenuOpen(true)}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 10,
+              fontFamily: 'Inter, sans-serif', fontSize: '0.875rem',
+              color: '#ffffff', padding: 0,
             }}
           >
-            <div className="hidden md:flex items-center" style={{ gap: 4 }}>
-              {NAV_LINKS.map((link, i) => (
+            Menu
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 5, width: 18 }}>
+              <span style={{ display: 'block', height: 1.5, background: '#ffffff', borderRadius: 1 }} />
+              <span style={{ display: 'block', height: 1.5, background: '#ffffff', borderRadius: 1 }} />
+            </div>
+          </button>
+        </div>
+      </nav>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setMenuOpen(false)}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 200,
+              background: 'rgba(0,0,0,0.6)',
+              backdropFilter: 'blur(2px)',
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="drawer"
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'tween', duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              position: 'fixed', top: 0, right: 0, bottom: 0,
+              width: 'min(400px, 90vw)',
+              background: '#111111',
+              zIndex: 201,
+              display: 'flex', flexDirection: 'column',
+              padding: '24px 36px 40px',
+              overflowY: 'auto',
+            }}
+          >
+            <div style={{
+              display: 'flex', alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 52,
+            }}>
+              <span style={{
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontWeight: 800, fontSize: '1.2rem',
+                color: '#ffffff', letterSpacing: '-0.02em',
+              }}>
+                Limner<span style={{ color: ACCENT }}>.</span>
+              </span>
+              <button
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'rgba(255,255,255,0.6)', padding: 4,
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.875rem',
+                }}
+              >
+                Menu
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <div style={{ flex: 1 }}>
+              {DRAWER_LINKS.map((link, i) => (
                 <motion.a
                   key={link.label}
                   href={link.href}
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  onClick={() => setMenuOpen(false)}
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.04 + 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    color: 'rgba(255,255,255,0.5)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    fontFamily: 'Space Grotesk, sans-serif',
+                    fontWeight: 600,
+                    fontSize: '1.05rem',
+                    color: '#ffffff',
                     textDecoration: 'none',
-                    padding: '7px 14px',
-                    borderRadius: '9999px',
-                    transition: 'color 0.2s ease, background 0.2s ease',
+                    padding: '16px 0',
+                    borderBottom: '1px solid rgba(255,255,255,0.07)',
+                    transition: 'color 0.2s',
                   }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.color = '#ffffff'
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.07)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
-                    e.currentTarget.style.background = 'transparent'
-                  }}
+                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = ACCENT)}
+                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
                 >
                   {link.label}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ opacity: 0.3 }}>
+                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </motion.a>
               ))}
             </div>
 
             <motion.a
-              href="#contact"
+              href="#portfolio"
+              onClick={() => setMenuOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="hidden md:inline-flex"
-              style={{
-                alignItems: 'center',
-                gap: 6,
-                padding: '9px 22px',
-                borderRadius: '9999px',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                backgroundColor: '#ffffff',
-                color: '#0A0A0A',
-                textDecoration: 'none',
-                fontFamily: 'Inter, sans-serif',
-                letterSpacing: '-0.01em',
-                marginLeft: 8,
-              }}
-            >
-              Get Started
-            </motion.a>
-
-            {/* Mobile hamburger */}
-            <button
-              className="md:hidden"
-              onClick={() => setMenuOpen(v => !v)}
-              aria-label="Menu"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, color: '#ffffff' }}
-            >
-              <div style={{ width: 22, height: 16, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1 }} />
-                <span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1 }} />
-                <span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1 }} />
-              </div>
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── Bottom floating pill — appears on scroll ── */}
-      <AnimatePresence>
-        {scrolled && (
-          <motion.nav
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              position: 'fixed',
-              bottom: 28,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 50,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              padding: '6px 6px 6px 20px',
-              borderRadius: '9999px',
-              background: 'rgba(10,10,10,0.9)',
-              backdropFilter: 'blur(24px)',
-              WebkitBackdropFilter: 'blur(24px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              boxShadow: '0 8px 40px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.05)',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {/* Links */}
-            <div className="hidden md:flex items-center" style={{ gap: 2 }}>
-              {NAV_LINKS.map(link => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '0.83rem',
-                    fontWeight: 500,
-                    color: 'rgba(255,255,255,0.5)',
-                    textDecoration: 'none',
-                    padding: '7px 14px',
-                    borderRadius: '9999px',
-                    transition: 'color 0.2s ease, background 0.2s ease',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.color = '#ffffff'
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
-                    e.currentTarget.style.background = 'transparent'
-                  }}
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-
-            {/* CTA */}
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
+              transition={{ delay: 0.4, duration: 0.4 }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 6,
-                padding: '9px 20px',
+                justifyContent: 'center',
+                padding: '10px 22px',
+                border: '1px solid rgba(255,255,255,0.25)',
                 borderRadius: '9999px',
-                fontSize: '0.83rem',
-                fontWeight: 600,
-                backgroundColor: '#ffffff',
-                color: '#0A0A0A',
-                textDecoration: 'none',
                 fontFamily: 'Inter, sans-serif',
-                letterSpacing: '-0.01em',
-                marginLeft: 8,
-                flexShrink: 0,
+                fontSize: '0.85rem',
+                fontWeight: 500,
+                color: '#ffffff',
+                textDecoration: 'none',
+                margin: '28px 0',
+                alignSelf: 'flex-start',
+                transition: 'border-color 0.2s, color 0.2s',
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLElement
+                el.style.borderColor = ACCENT
+                el.style.color = ACCENT
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLElement
+                el.style.borderColor = 'rgba(255,255,255,0.25)'
+                el.style.color = '#ffffff'
               }}
             >
-              Get Started
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                <path d="M1.5 5.5h8M6 2l3.5 3.5L6 9" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              View Our Work
             </motion.a>
 
-            {/* Mobile hamburger */}
-            <button
-              className="md:hidden"
-              onClick={() => setMenuOpen(v => !v)}
-              aria-label="Menu"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '7px 12px', color: '#ffffff', display: 'flex', alignItems: 'center' }}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.4 }}
             >
-              <motion.div style={{ width: 20, height: 14, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <motion.span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1, transformOrigin: 'center' }}
-                  animate={menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }} transition={{ duration: 0.3 }} />
-                <motion.span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1 }}
-                  animate={menuOpen ? { opacity: 0 } : { opacity: 1 }} transition={{ duration: 0.2 }} />
-                <motion.span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1, transformOrigin: 'center' }}
-                  animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }} transition={{ duration: 0.3 }} />
-              </motion.div>
-            </button>
-          </motion.nav>
-        )}
-      </AnimatePresence>
-
-      {/* ── Mobile full-screen menu ── */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            className="md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: 'fixed', inset: 0, zIndex: 40,
-              background: '#0A0A0A',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
-            }}
-          >
-            {[...NAV_LINKS, { label: 'Contact', href: '#contact' }].map((link, i) => (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ delay: i * 0.06 + 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                  fontFamily: 'Space Grotesk, sans-serif',
-                  fontSize: '2.5rem',
-                  fontWeight: 700,
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  letterSpacing: '-0.03em',
-                  padding: '8px 0',
-                }}
-                onMouseEnter={e => ((e.target as HTMLElement).style.color = 'rgba(255,255,255,0.35)')}
-                onMouseLeave={e => ((e.target as HTMLElement).style.color = '#ffffff')}
-              >
-                {link.label}
-              </motion.a>
-            ))}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)' }}>
+                  hello@launchables.com.au
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)' }}>
+                  Australia-wide
+                </span>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

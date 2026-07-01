@@ -152,7 +152,7 @@ export default function Pricing() {
                   display: 'inline-flex',
                   alignItems: 'center',
                   padding: '4px 10px',
-                  background: '#ffffff',
+                  background: '#AAFF00',
                   borderRadius: '9999px',
                   fontFamily: 'Inter, sans-serif',
                   fontSize: '0.65rem',

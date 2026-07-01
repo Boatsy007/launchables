@@ -202,7 +202,7 @@ export default function FAQ() {
                 fontSize: '0.85rem',
                 fontWeight: 600,
                 color: '#0A0A0A',
-                background: '#ffffff',
+                background: '#AAFF00',
                 textDecoration: 'none',
                 letterSpacing: '-0.01em',
               }}

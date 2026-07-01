@@ -1,143 +1,192 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion } from 'framer-motion'
 
-const reasons = [
-  {
-    n: '01',
-    title: 'Fast Turnaround',
-    body: 'Most agencies take 3–4 months. We deliver in 2–4 weeks without cutting corners. Your time to market is our competitive advantage.',
-  },
-  {
-    n: '02',
-    title: 'Modern Design',
-    body: 'Every pixel is intentional. We design websites that look premium, feel professional, and make visitors trust you instantly.',
-  },
-  {
-    n: '03',
-    title: 'Built to Convert',
-    body: "Beautiful means nothing if it doesn't sell. Every layout, headline, and button is designed to turn visitors into enquiries.",
-  },
-  {
-    n: '04',
-    title: 'SEO Focused',
-    body: 'We build for Google from day one — perfect Core Web Vitals, semantic HTML, structured data. Your site ranks because it was built to rank.',
-  },
-  {
-    n: '05',
-    title: 'Local Australian Support',
-    body: "We're based in Australia. No offshoring. No handoff to juniors. A dedicated local team that genuinely cares about your results.",
-  },
+const ACCENT = '#AAFF00'
+
+const CLIENT_LOGOS = [
+  'Apex Plumbing', 'Nova Coffee', 'The Styling Room', 'Greenpath',
+  'CleanPro', 'Summit Health', 'Swept Services', 'Mode Fashion',
+  'Apex Plumbing', 'Nova Coffee', 'The Styling Room', 'Greenpath',
+  'CleanPro', 'Summit Health', 'Swept Services', 'Mode Fashion',
 ]
 
-export default function WhyLaunchables() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+function WebsiteCollage() {
+  const cards = [
+    { bg: 'linear-gradient(135deg,#0d1929,#091420)', accent: '#2BAEF5', label: 'Commercial' },
+    { bg: 'linear-gradient(135deg,#1a0c04,#0d0603)', accent: '#D97706', label: 'Hospitality' },
+    { bg: 'linear-gradient(135deg,#0a1628,#071020)', accent: '#2563EB', label: 'Trades' },
+    { bg: 'linear-gradient(135deg,#1a0a14,#0d0509)', accent: '#DB2777', label: 'Beauty' },
+    { bg: 'linear-gradient(135deg,#061a0c,#030d06)', accent: '#16A34A', label: 'Landscape' },
+  ]
 
   return (
-    <section id="why" style={{ backgroundColor: '#ffffff', padding: 'clamp(80px, 10vw, 120px) 0' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(24px, 5vw, 48px)' }}>
+    <div style={{ position: 'relative', height: 420, width: '100%' }}>
+      {cards.map((c, i) => (
         <div
-          ref={ref}
+          key={i}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(240px, 380px) 1fr',
-            gap: 'clamp(40px, 8vw, 120px)',
-            alignItems: 'start',
+            position: 'absolute',
+            width: 220,
+            height: 150,
+            background: c.bg,
+            borderRadius: 10,
+            border: '1px solid rgba(255,255,255,0.08)',
+            overflow: 'hidden',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+            top: [20, 100, 200, 60, 260][i],
+            left: [0, 120, 40, 220, 160][i],
+            transform: `rotate(${[-3, 2, -1.5, 3, -2][i]}deg)`,
+            transition: 'transform 0.3s ease',
           }}
         >
-          {/* Left: heading */}
-          <div style={{ position: 'sticky', top: 100 }}>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5 }}
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.7rem',
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.2em',
-                color: '#AAAAAA',
-                marginBottom: 16,
-              }}
-            >
-              Why Launchables
-            </motion.p>
-            <motion.h2
-              initial={{ opacity: 0, y: 24 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          <div style={{ padding: '10px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ width: 40, height: 5, background: 'rgba(255,255,255,0.2)', borderRadius: 2 }} />
+            <div style={{ display: 'flex', gap: 6 }}>
+              {[24, 30, 20].map((w, j) => <div key={j} style={{ width: w, height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2 }} />)}
+            </div>
+          </div>
+          <div style={{ padding: '12px 12px', flex: 1 }}>
+            <div style={{ width: '60%', height: 8, background: c.accent, opacity: 0.8, borderRadius: 2, marginBottom: 6 }} />
+            <div style={{ width: '80%', height: 5, background: 'rgba(255,255,255,0.12)', borderRadius: 2, marginBottom: 4 }} />
+            <div style={{ width: '55%', height: 5, background: 'rgba(255,255,255,0.07)', borderRadius: 2, marginBottom: 14 }} />
+            <div style={{ display: 'flex', gap: 6 }}>
+              <div style={{ width: 56, height: 20, background: c.accent, borderRadius: 3 }} />
+              <div style={{ width: 56, height: 20, background: 'rgba(255,255,255,0.06)', borderRadius: 3, border: '1px solid rgba(255,255,255,0.1)' }} />
+            </div>
+          </div>
+          <div style={{ position: 'absolute', bottom: 6, right: 10 }}>
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 8, color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{c.label}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export default function WhyLaunchables() {
+  return (
+    <section id="why" style={{ backgroundColor: '#ffffff' }}>
+      {/* Logo ticker */}
+      <div style={{
+        borderBottom: '1px solid rgba(0,0,0,0.08)',
+        padding: '20px 0',
+        overflow: 'hidden',
+      }}>
+        <div className="ticker-track" style={{ display: 'flex', gap: 64, width: 'max-content' }}>
+          {CLIENT_LOGOS.map((logo, i) => (
+            <span
+              key={i}
               style={{
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontWeight: 700,
-                fontSize: 'clamp(2rem, 3.5vw, 3rem)',
-                lineHeight: 1.1,
-                letterSpacing: '-0.03em',
-                color: '#0A0A0A',
-                margin: 0,
+                fontSize: '0.85rem',
+                color: '#BBBBBB',
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                whiteSpace: 'nowrap',
               }}
             >
-              The agency that actually delivers.
-            </motion.h2>
-          </div>
+              {logo}
+            </span>
+          ))}
+        </div>
+      </div>
 
-          {/* Right: reasons */}
-          <div>
-            {reasons.map((r, i) => (
-              <motion.div
-                key={r.n}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '48px 1fr',
-                  gap: 24,
-                  padding: '32px 0',
-                  borderTop: '1px solid rgba(0,0,0,0.07)',
-                }}
-              >
-                {/* Number */}
-                <span style={{
-                  fontFamily: 'Space Grotesk, sans-serif',
-                  fontWeight: 700,
-                  fontSize: '0.72rem',
-                  color: '#CCCCCC',
-                  letterSpacing: '0.08em',
-                  paddingTop: 3,
-                }}>
-                  {r.n}
-                </span>
-                {/* Content */}
-                <div>
-                  <h3 style={{
-                    fontFamily: 'Space Grotesk, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '1.1rem',
-                    color: '#0A0A0A',
-                    margin: '0 0 10px',
-                    letterSpacing: '-0.01em',
-                  }}>
-                    {r.title}
-                  </h3>
-                  <p style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '0.9rem',
-                    lineHeight: 1.7,
-                    color: '#666666',
-                    margin: 0,
-                  }}>
-                    {r.body}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-            {/* Last border */}
-            <div style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }} />
-          </div>
+      {/* Agency intro */}
+      <div style={{ padding: 'clamp(64px, 8vw, 100px) clamp(24px, 5vw, 72px)' }}>
+        <div style={{
+          maxWidth: 1280,
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 'clamp(40px, 6vw, 80px)',
+          alignItems: 'center',
+        }}>
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              color: '#888888',
+              marginBottom: 16,
+              letterSpacing: '0.01em',
+            }}>
+              Your Get It Done
+            </p>
+            <h2 style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(2.5rem, 5vw, 5rem)',
+              lineHeight: 0.95,
+              letterSpacing: '-0.04em',
+              color: '#0A0A0A',
+              margin: '0 0 20px',
+            }}>
+              Web Design<br />Agency
+            </h2>
+            <p style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(1.4rem, 2.5vw, 2.2rem)',
+              letterSpacing: '-0.03em',
+              margin: '0 0 24px',
+            }}>
+              <span style={{ color: ACCENT }}>Get More.</span>{' '}
+              <span style={{ color: '#0A0A0A' }}>Launchables.</span>
+            </p>
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '1rem',
+              lineHeight: 1.7,
+              color: '#555555',
+              margin: '0 0 32px',
+              maxWidth: 440,
+            }}>
+              Professional web design and digital marketing for Australian businesses. We work with{' '}
+              <strong style={{ color: '#0A0A0A' }}>SMEs</strong> and{' '}
+              <strong style={{ color: '#0A0A0A' }}>established brands</strong> who want results, not excuses.
+            </p>
+            <a
+              href="#contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '14px 32px',
+                borderRadius: '9999px',
+                background: ACCENT,
+                color: '#0A0A0A',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.95rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                letterSpacing: '-0.01em',
+                transition: 'transform 0.2s, opacity 0.2s',
+              }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
+            >
+              Get A Quote
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </a>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ delay: 0.2, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <WebsiteCollage />
+          </motion.div>
         </div>
       </div>
     </section>

@@ -314,9 +314,9 @@ export default function Portfolio() {
                   cursor: 'pointer',
                   border: '1px solid',
                   transition: 'all 0.2s ease',
-                  borderColor: active === f ? '#ffffff' : 'rgba(255,255,255,0.1)',
-                  background: active === f ? '#ffffff' : 'transparent',
-                  color: active === f ? '#0A0A0A' : 'rgba(255,255,255,0.35)',
+                  borderColor: active === f ? '#AAFF00' : 'rgba(255,255,255,0.1)',
+                  background: active === f ? '#AAFF00' : 'transparent',
+                  color: '#0A0A0A',
                 }}
               >
                 {f}
