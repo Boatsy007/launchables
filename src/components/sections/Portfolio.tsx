@@ -4,6 +4,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const PROJECTS = [
   {
+    id: 'cnca',
+    name: 'CNCA',
+    category: 'Association',
+    year: '2025',
+    result: 'Live at cnca.com.au',
+    description: 'Full website for the Cheerleading & Gymnastics Association of Australia — clean, fast and built to convert.',
+    bg: '#080d1a',
+    accent: '#2a5fcf',
+    url: 'https://www.cnca.com.au/',
+  },
+  {
     id: 'swept',
     name: 'Swept Services',
     category: 'Commercial',
@@ -65,7 +76,9 @@ const PROJECTS = [
   },
 ]
 
-function ProjectCard({ p, i }: { p: typeof PROJECTS[0]; i: number }) {
+type Project = typeof PROJECTS[0] & { url?: string }
+
+function ProjectCard({ p, i }: { p: Project; i: number }) {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -127,17 +140,37 @@ function ProjectCard({ p, i }: { p: typeof PROJECTS[0]; i: number }) {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}
             >
-              <div style={{
-                padding: '10px 24px',
-                border: '1px solid rgba(247,247,245,0.3)',
-                borderRadius: 8,
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.85rem',
-                fontWeight: 400,
-                color: 'var(--text)',
-              }}>
-                View Project
-              </div>
+              {p.url ? (
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    padding: '10px 24px',
+                    border: '1px solid rgba(247,247,245,0.3)',
+                    borderRadius: 8,
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '0.85rem',
+                    fontWeight: 400,
+                    color: 'var(--text)',
+                    textDecoration: 'none',
+                  }}
+                >
+                  View Project →
+                </a>
+              ) : (
+                <div style={{
+                  padding: '10px 24px',
+                  border: '1px solid rgba(247,247,245,0.3)',
+                  borderRadius: 8,
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.85rem',
+                  fontWeight: 400,
+                  color: 'var(--text)',
+                }}>
+                  View Project
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
