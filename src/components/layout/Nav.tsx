@@ -50,10 +50,8 @@ export default function Nav() {
         }}
       >
         {/* Logo */}
-        <a href="/" aria-label="SSSHHH — home" style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 800, fontSize: '1.4rem', color: 'var(--text)', letterSpacing: '-0.03em' }}>
-            SSSHHH<span style={{ color: 'var(--muted)' }}>.</span>
-          </span>
+        <a href="/" aria-label="Swept — home" style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+          <img src="/logo-swept.webp" alt="Swept" style={{ height: 48, width: 'auto', display: 'block' }} />
         </a>
 
         {/* Desktop links */}
@@ -168,7 +166,7 @@ export default function Nav() {
               borderBottom: '1px solid var(--border)',
               height: 60,
             }}>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 800, fontSize: '1.3rem', color: 'var(--text)', letterSpacing: '-0.03em' }}>SSSHHH<span style={{ color: 'var(--muted)' }}>.</span></span>
+              <img src="/logo-swept.webp" alt="Swept" style={{ height: 40, width: 'auto' }} />
               <button
                 onClick={() => setDrawerOpen(false)}
                 aria-label="Close menu"

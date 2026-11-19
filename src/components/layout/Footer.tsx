@@ -26,9 +26,7 @@ export default function Footer() {
         }}>
           <div>
             <a href="/" style={{ textDecoration: 'none', display: 'inline-block', marginBottom: 16 }}>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 800, fontSize: '1.5rem', color: 'var(--text)', letterSpacing: '-0.03em' }}>
-                SSSHHH<span style={{ color: 'var(--muted)' }}>.</span>
-              </span>
+              <img src="/logo-swept.webp" alt="Swept" style={{ height: 52, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)' }} />
             </a>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', lineHeight: 1.7, color: 'var(--muted)', margin: '0 0 24px', maxWidth: 280 }}>
               We shut the f**k up and just do the work. Websites and social for Australian businesses.
